@@ -25,6 +25,7 @@ var layers = [OsmMap, vector_layer];
 var map = new ol.Map({
     target: 'map',
     layers: layers,
+    controls: [new ol.control.Zoom, new ol.control.ScaleLine],
     view: new ol.View({
         center: [2000000, 6800000],
         zoom: 6
@@ -35,7 +36,7 @@ var select_interaction,
     draw_interaction;
 
 var $interaction_type = $('[name="interaction_type"]');
-$interaction_type.on('click', function(e) {
+$interaction_type.on('change', function(e) {
     if (this.value === 'draw') {
         addDrawInteraction();
     } else {
@@ -89,7 +90,8 @@ function clearDrawings() {
 }
 
 $('#osm-checkbox').change(function(){
-    layers[0].setVisible($('#osm-checkbox').is(':checked'));
+    $checkbox = $('#osm-checkbox');
+    layers[0].setVisible($checkbox.is(':checked'));
 });
 
 function spawnModal(){

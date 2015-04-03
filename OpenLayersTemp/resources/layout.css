@@ -9,20 +9,14 @@ a, a:hover, a:visited, a:active, a:focus {
     text-decoration: none;
 }
 .map {
-  height: 100vh;
+  height: calc(100vh - 42px);
   width: 100vw;
   background: url(textured_paper.jpeg) repeat;
 }
 
 .bottom-menu {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100vw;
-    height: 30px;
-    border-top: 2px #aaa solid;
-    background-color: #eee;
-    display: table;
+    display: flex;
+    border-top: 1px #ddd solid;
 }
 
 .form-bottom-menu {
@@ -32,6 +26,8 @@ a, a:hover, a:visited, a:active, a:focus {
 
 .input-type {
     display: inline-flex;
+    margin-right: 30px;
+    flex-grow: 1;
 }
 
 .data-type-item {
@@ -54,4 +50,26 @@ a, a:hover, a:visited, a:active, a:focus {
 
 input[name=interaction_type] {
     margin-left: 20px;
+}
+
+.map-nav {
+    margin: 0;
+    border: none;
+}
+
+.map-nav>li>a {
+    border-radius: 0 0 4px 4px;
+
+}
+.map-nav>li.active>a, .map-nav>li.active>a:hover, .map-nav>li.active>a:focus {
+    border: 1px #ddd solid;
+    border-top-color: transparent;
+}
+
+.btn-map-bottom-menu {
+    margin-top: 4px;
+}
+
+.btn-group-osm-checkbox {
+    float: right;
 }

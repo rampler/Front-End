@@ -7,7 +7,6 @@
     <link rel="stylesheet" href="css/ol.css" type="text/css">
     <link rel="stylesheet" href="resources/bootstrap/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="resources/layout.css" type="text/css">
-    <link rel="stylesheet" href="resources/bootstrap/css/bootstrap-responsive.min.css" type="text/css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,700italic,700,300,400&subset=latin,latin-ext'
           rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="build/ol.js"></script>
@@ -17,23 +16,62 @@
 </head>
 <body>
 <div id="map" class="map"></div>
+<div class="bottom-menu" role="tabpanel">
+    <div class="col-sm-4 col-md-4 col-lg-2">
+    <ul class="nav nav-tabs map-nav" role="tablist">
+        <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Kafelki</a></li>
+        <li role="presentation"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">Wektory</a></li>
+    </ul>
+    </div>
+    <!--<div class="input-type">-->
+        <!--<input type="radio" id="interaction_type_draw" name="interaction_type" value="draw" checked>-->
+        <!--<label for="interaction_type_draw">Dodaj</label>-->
+    <!--</div>-->
+    <!--<div class="input-type">-->
+        <!--<input type="radio" id="interaction_type_modify" name="interaction_type" value="modify">-->
+        <!--<label for="interaction_type_modify">Edytuj</label>-->
+    <!--</div>-->
 
-<div class="bottom-menu">
-    <a href="#"><div class="input-type data-type-item item-selected">Kafelki</div></a>
-    <a href="#"><div class="input-type data-type-item">Wektory</div></a>
-    <div class="input-type">
-        <input type="radio" id="interaction_type_draw" name="interaction_type" value="draw" checked>
-        <label for="interaction_type_draw">Dodaj</label>
+    <div class="col-sm-6 col-md-4 col-lg-8">
+        <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-primary btn-map-bottom-menu active">
+                <input id="interaction_type_draw" type="radio" name="interaction_type" value="draw" autocomplete="off" checked> Dodaj
+            </label>
+            <label class="btn btn-primary btn-map-bottom-menu">
+                <input id="interaction_type_modify" type="radio" name="interaction_type" value="modify" autocomplete="off"> Edytuj
+            </label>
+        </div>
     </div>
-    <div class="input-type">
-        <input type="radio" id="interaction_type_modify" name="interaction_type" value="modify">
-        <label for="interaction_type_modify">Edytuj</label>
-    </div>
-    <div class="input-type">
-        <input type="checkbox" id="osm-checkbox" name="osm-checkbox" checked="checked">
-        <label for="osm-checkbox">OpenStreetMap</label>
+
+    <div class="col-sm-4 col-md-4 col-lg-2">
+        <div class="btn-group btn-group-osm-checkbox" data-toggle="buttons">
+            <label class="btn btn-primary btn-map-bottom-menu active">
+                <input id="osm-checkbox" type="checkbox" autocomplete="off" checked> OpenStreetMap
+            </label>
+        </div>
+    <!--<input type="checkbox" id="osm-checkbox" name="osm-checkbox" checked="checked">-->
+    <!--<label for="osm-checkbox">OpenStreetMap</label>-->
     </div>
 </div>
+
+
+<!--<div class="bottom-menu">-->
+
+    <!--<a href="#"><div class="input-type data-type-item item-selected">Kafelki</div></a>-->
+    <!--<a href="#"><div class="input-type data-type-item">Wektory</div></a>-->
+    <!--<div class="input-type">-->
+        <!--<input type="radio" id="interaction_type_draw" name="interaction_type" value="draw" checked>-->
+        <!--<label for="interaction_type_draw">Dodaj</label>-->
+    <!--</div>-->
+    <!--<div class="input-type">-->
+        <!--<input type="radio" id="interaction_type_modify" name="interaction_type" value="modify">-->
+        <!--<label for="interaction_type_modify">Edytuj</label>-->
+    <!--</div>-->
+    <!--<div class="input-type">-->
+        <!--<input type="checkbox" id="osm-checkbox" name="osm-checkbox" checked="checked">-->
+        <!--<label for="osm-checkbox">OpenStreetMap</label>-->
+    <!--</div>-->
+<!--</div>-->
 
 
 <!--Modal-->
