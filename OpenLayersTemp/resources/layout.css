@@ -1,6 +1,11 @@
 body {
     margin: 0;
     padding: 0;
+    font-family: 'Open Sans', sans-serif;
+}
+a, a:hover, a:visited, a:active, a:focus {
+    color: black;
+    text-decoration: none;
 }
 .map {
   height: 100vh;
@@ -13,11 +18,27 @@ body {
     bottom: 0;
     left: 0;
     width: 100vw;
-    height: 50px;
-    background-color: white;
+    height: 30px;
+    border-top: 2px #aaa solid;
+    background-color: #eee;
+    display: table;
 }
 
 .form-bottom-menu {
     margin: 0;
     padding: 0;
+}
+
+.input-type {
+    display: inline-flex;
+    background-color: #ddd;
+    padding: 5px 10px;
+    font-size: 15px;
+    margin: 0;
+    border-right: 1px #aaa solid;
+}
+
+.item-selected {
+    background-color: #aaa;
+    color: #eee;
 }
