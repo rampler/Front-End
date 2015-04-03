@@ -1,13 +1,13 @@
-var raster = new ol.layer.Tile({
-  source: new ol.source.MapQuest({layer: 'sat'})
+var OsmMap = new ol.layer.Tile({
+  source: new ol.source.MapQuest({layer: 'osm'})
 });
 
 var map = new ol.Map({
-  layers: [raster],
+  layers: [OsmMap],
   target: 'map',
   view: new ol.View({
-    center: [-11000000, 4600000],
-    zoom: 4
+    center: [2000000, 6800000],
+    zoom: 6
   })
 });
 
