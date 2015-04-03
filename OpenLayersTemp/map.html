@@ -12,16 +12,11 @@
           rel='stylesheet' type='text/css'>
     <script type="text/javascript" src="build/ol.js"></script>
     <script src="resources/jquery.min.js" type="text/javascript"></script>
+    <script src="resources/bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
     <title>Inwentaryzacja oświetlenia zewnetrznego</title>
 </head>
 <body>
-<!--<div class="container-fluid">-->
-
-<!--<div class="row-fluid">-->
-<!--<div class="span12">-->
 <div id="map" class="map"></div>
-<!--</div>-->
-<!--</div>-->
 
 <div class="bottom-menu">
     <a href="#"><div class="input-type data-type-item item-selected">Kafelki</div></a>
@@ -38,12 +33,28 @@
         <input type="checkbox" id="osm-checkbox" name="osm-checkbox" checked="checked">
         <label for="osm-checkbox">OpenStreetMap</label>
     </div>
-    <!--<div id="delete" class="input-type" style="text-decoration:underline;cursor:pointer">-->
-        <!--Delete all features-->
-    <!--</div>-->
 </div>
 
-<!--</div>-->
+
+<!--Modal-->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Nowy segment drogi</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success">Zapisz</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Wróć</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script src="fe-map.js" type="text/javascript"></script>
 </body>
 </html>
