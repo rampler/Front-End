@@ -2,6 +2,7 @@ body {
     margin: 0;
     padding: 0;
     font-family: 'Open Sans', sans-serif;
+    font-size: 10pt;
 }
 a, a:hover, a:visited, a:active, a:focus {
     color: black;
@@ -31,6 +32,9 @@ a, a:hover, a:visited, a:active, a:focus {
 
 .input-type {
     display: inline-flex;
+}
+
+.data-type-item {
     background-color: #ddd;
     padding: 5px 10px;
     font-size: 15px;
@@ -41,4 +45,13 @@ a, a:hover, a:visited, a:active, a:focus {
 .item-selected {
     background-color: #aaa;
     color: #eee;
+}
+
+#osm-checkbox {
+    margin-right: 10px;
+    margin-left: 50px;
+}
+
+input[name=interaction_type] {
+    margin-left: 20px;
 }
