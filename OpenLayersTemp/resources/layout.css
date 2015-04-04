@@ -9,7 +9,7 @@ a, a:hover, a:visited, a:active, a:focus {
     text-decoration: none;
 }
 .map {
-  height: calc(100vh - 42px);
+  height: calc(100vh - 43px);
   width: 100vw;
   background: url(textured_paper.jpeg) repeat;
 }

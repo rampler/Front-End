@@ -89,15 +89,6 @@ function clearDrawings() {
     }
 }
 
-$('#osm-checkbox').change(function(){
-    $checkbox = $('#osm-checkbox');
-    layers[0].setVisible($checkbox.is(':checked'));
-});
 
-function spawnModal(){
-    $('#addModal').modal('show');
-}
 
-$('#addModal').on('hidden.bs.modal', function (e) {
-    clearDrawings();
-});
+
