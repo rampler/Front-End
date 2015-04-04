@@ -9,14 +9,14 @@ a, a:hover, a:visited, a:active, a:focus {
     text-decoration: none;
 }
 .map {
-  height: calc(100vh - 43px);
+  height: calc(100vh - 44px);
   width: 100vw;
   background: url(textured_paper.jpeg) repeat;
 }
 
 .bottom-menu {
     display: flex;
-    border-top: 1px #ddd solid;
+    border-top: 2px #aaa solid;
 }
 
 .form-bottom-menu {
@@ -59,7 +59,8 @@ input[name=interaction_type] {
 
 .map-nav>li>a {
     border-radius: 0 0 4px 4px;
-
+    padding: 5px 15px;
+    cursor: pointer;
 }
 .map-nav>li.active>a, .map-nav>li.active>a:hover, .map-nav>li.active>a:focus {
     border: 1px #ddd solid;
@@ -72,4 +73,13 @@ input[name=interaction_type] {
 
 .btn-group-osm-checkbox {
     float: right;
+}
+
+.modal-add-body {
+    display: table;
+    width: 100%;
+}
+
+.modal-add-dialog {
+    width: 66.6%;
 }

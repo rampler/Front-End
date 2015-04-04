@@ -59,7 +59,23 @@ function addDrawInteraction() {
 
     draw_interaction = new ol.interaction.Draw({
         source: vector_layer.getSource(),
-        type: ("LineString")
+        type: ("LineString"),
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)',
+                width: 1
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 153, 255, 0.7)',
+                width: 5
+            }),
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: 'rgba(0, 153, 255, 0.7)'
+                })
+            })
+        })
     });
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {

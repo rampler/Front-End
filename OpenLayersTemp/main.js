@@ -13,9 +13,10 @@ $('#addModal').on('hidden.bs.modal', function (e) {
     clearDrawings();
 });
 
-/** Delete key reset drawing**/
+/** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
-    if (event.keyCode == 46) {
+    if (event.keyCode == 27) {
+        console.log(draw_interaction.getProperties());
         map.removeInteraction(draw_interaction);
         map.addInteraction(draw_interaction);
     }
