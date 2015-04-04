@@ -80,7 +80,7 @@ function addDrawInteraction() {
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {
         getJSONcoordinates();
-        spawnModal();
+        initializeJsonEditor();
     });
 }
 

@@ -6,24 +6,32 @@ $('[data-toggle="tooltip"]').tooltip();
 
 var addForm = document.getElementById('addForm');
 var jsonEditor;
+var schema;
 
-function initializeJsonEditor() {
+function initializeJsonEditor(jsonValues) {
     addForm.innerHTML = null;
-    $.ajax("resources/schema.json")
-        .done(function (data) {
-            jsonEditor = new JSONEditor(addForm, {
-                theme: 'bootstrap3',
-                disable_edit_json: true,
-                disable_properties: true,
-                disable_collapse: true,
-                form_name_root: "T",
-                schema: data
+    if(!schema) {
+        $.ajax("resources/schema.json")
+            .done(function (data) {
+                schema = data;
+                buildJsonEditor(jsonValues);
             });
-        });
+    }
+    else
+        buildJsonEditor();
 }
 
-function spawnModal() {
-    initializeJsonEditor();
+function buildJsonEditor(jsonValues){
+    jsonEditor = new JSONEditor(addForm, {
+        theme: 'bootstrap3',
+        disable_edit_json: true,
+        disable_properties: true,
+        disable_collapse: true,
+        form_name_root: "T",
+        schema: schema
+    });
+    if(jsonValues)
+        jsonEditor.setValue(jsonValues);
     $('#addModal').modal('show');
 }
 
