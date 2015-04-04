@@ -81,9 +81,29 @@ input[name=interaction_type] {
 }
 
 .modal-add-dialog {
-    width: 66.6%;
+    width: 70%;
+    margin-top: 10px;
+}
+
+h3 {
+    margin: 5px 0;
+    font-size: 18px;
 }
 
 #addForm>div>h3{
     margin: 0  0 10px 0;
+}
+
+.modal-add-body .well {
+    margin-bottom: 5px;
+}
+
+.modal-add-body .form-control {
+    height: 30px;
+    font-size: 12px;
+}
+
+.modal-add-body .btn {
+    font-size: 12px;
+    padding: 3px 12px;
 }

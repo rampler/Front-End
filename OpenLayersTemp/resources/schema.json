@@ -134,18 +134,30 @@
         "properties": {
           "lon": {
             "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
             "title": "Szerokość geograficzna"
           },
           "lat": {
             "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
             "title": "Długość geograficzna"
           },
           "elev": {
             "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
             "title": "Wysokość geograficzna"
           },
           "order": {
             "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
             "title": "Pozycja"
           }
         }
