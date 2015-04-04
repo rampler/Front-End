@@ -4,7 +4,26 @@
 
 $('[data-toggle="tooltip"]').tooltip();
 
+var addForm = document.getElementById('addForm');
+var jsonEditor;
+
+function initializeJsonEditor() {
+    addForm.innerHTML = null;
+    $.ajax("resources/schema.json")
+        .done(function (data) {
+            jsonEditor = new JSONEditor(addForm, {
+                theme: 'bootstrap3',
+                disable_edit_json: true,
+                disable_properties: true,
+                disable_collapse: true,
+                form_name_root: "T",
+                schema: data
+            });
+        });
+}
+
 function spawnModal() {
+    initializeJsonEditor();
     $('#addModal').modal('show');
 }
 

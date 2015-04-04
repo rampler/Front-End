@@ -1,0 +1,155 @@
+{
+  "type": "object",
+  "title": "Nowy segment drogi",
+  "format": "grid",
+  "properties": {
+    "id": {
+      "type": "string",
+      "title": "ID"
+    },
+    "street": {
+      "type": "string",
+      "title": "Nazwa ulicy"
+    },
+    "mainLightningClass": {
+      "type": "string",
+      "title": "Klasa oświetleniowa"
+    },
+    "desc": {
+      "type": "string",
+      "title": "Opis"
+    },
+    "lampArrangement": {
+      "type": "string",
+      "title": "Położenie lamp",
+      "enum": [
+        "SINGLE_SIDED_RIGHT",
+        "SINGLE_SIDED_LEFT",
+        "SINGLE_OPPOSITE",
+        "SINGLE_STAGGERED_LEFT",
+        "SINGLE_STAGGERED_RIGHT",
+        "SINGLE_FREE",
+        "DOUBLE_TWIN",
+        "DOUBLE_OPPOSITE",
+        "DOUBLE_OPPOSITE_AND_TWIN",
+        "DOUBLE_FREE"
+      ]
+    },
+    "roadSection": {
+      "type": "array",
+      "title": "Sekcje drogi",
+      "format": "tabs",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "title": "Sekcja",
+        "headerTemplate": "{{self.id}}",
+        "properties": {
+          "id": {
+            "type": "string",
+            "options": {
+              "grid_columns": 4
+            },
+            "title": "ID"
+          },
+          "type": {
+            "type": "string",
+            "title": "Typ",
+            "options": {
+              "grid_columns": 4,
+              "enum_titles": [
+                "Chodnik",
+                "Droga",
+                "Rezerwacja",
+                "Ścieżka rowerowa"
+              ]
+            },
+            "enum": [
+              "walkway",
+              "road",
+              "reservation",
+              "cycleLane"
+            ]
+          },
+          "numberOfLanes": {
+            "type": "number",
+            "options": {
+              "grid_columns": 4
+            },
+            "title": "Ilość pasów ruchu"
+          },
+          "widthStart": {
+            "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Początkowa szerokość sekcji"
+          },
+          "widthEnd": {
+            "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Końcowa szerokość sekcji"
+          },
+          "elevationStart": {
+            "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Początkowa wysokość względem sekcji"
+          },
+          "elevationEnd": {
+            "type": "number",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Końcowa wysokość względem sekcji"
+          },
+          "roadSurfaceId": {
+            "type": "string",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Identyfikator typu powierzchni"
+          },
+          "lightingClassId": {
+            "type": "string",
+            "options": {
+              "grid_columns": 6
+            },
+            "title": "Identyfikator klasy oświetleniowej drogi"
+          }
+        }
+      }
+    },
+    "coordinates": {
+      "type": "array",
+      "title": "Koordynaty",
+      "format": "tabs",
+      "items": {
+        "type": "object",
+        "format": "grid",
+        "headerTemplate": "Pozycja: {{ self.order }} - ({{self.lon}}, {{self.lat}})",
+        "properties": {
+          "lon": {
+            "type": "number",
+            "title": "Szerokość geograficzna"
+          },
+          "lat": {
+            "type": "number",
+            "title": "Długość geograficzna"
+          },
+          "elev": {
+            "type": "number",
+            "title": "Wysokość geograficzna"
+          },
+          "order": {
+            "type": "number",
+            "title": "Pozycja"
+          }
+        }
+      }
+    }
+  }
+}
