@@ -18,7 +18,7 @@ function initializeJsonEditor(jsonValues) {
             });
     }
     else
-        buildJsonEditor();
+        buildJsonEditor(jsonValues);
 }
 
 function buildJsonEditor(jsonValues){
@@ -43,7 +43,6 @@ $('#addModal').on('hidden.bs.modal', function (e) {
 /** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
     if (event.keyCode == 27) {
-        console.log(draw_interaction.getProperties());
         map.removeInteraction(draw_interaction);
         map.addInteraction(draw_interaction);
     }

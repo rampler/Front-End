@@ -79,8 +79,7 @@ function addDrawInteraction() {
     });
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {
-        getJSONcoordinates();
-        initializeJsonEditor();
+        initializeJsonEditor(getEditorValues(getJSONcoordinates()));
     });
 }
 
@@ -93,9 +92,7 @@ function getJSONcoordinates() {
         console.log(e.name + ": " + e.message);
         return;
     }
-
-    console.log(data);
-    return data;
+    return JSON.parse(data).features[0].geometry.coordinates;
 }
 
 function clearDrawings() {

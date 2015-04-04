@@ -130,7 +130,7 @@
       "items": {
         "type": "object",
         "format": "grid",
-        "headerTemplate": "Pozycja: {{ self.order }} - ({{self.lon}}, {{self.lat}})",
+        "headerTemplate": "Pozycja: {{ self.order }}",
         "properties": {
           "lon": {
             "type": "number",
