@@ -48,15 +48,22 @@
           "id": {
             "type": "string",
             "options": {
-              "grid_columns": 4
+              "grid_columns": 3
             },
             "title": "ID"
+          },
+          "idx": {
+            "type": "number",
+            "options": {
+              "grid_columns": 3
+            },
+            "title": "Idx"
           },
           "type": {
             "type": "string",
             "title": "Typ",
             "options": {
-              "grid_columns": 4,
+              "grid_columns": 3,
               "enum_titles": [
                 "Chodnik",
                 "Droga",
@@ -74,7 +81,7 @@
           "numberOfLanes": {
             "type": "number",
             "options": {
-              "grid_columns": 4
+              "grid_columns": 3
             },
             "title": "Ilość pasów ruchu"
           },
@@ -130,7 +137,7 @@
       "items": {
         "type": "object",
         "format": "grid",
-        "headerTemplate": "Pozycja: {{ self.order }}",
+        "headerTemplate": "Punkt: {{ self.order }}",
         "properties": {
           "lon": {
             "type": "number",
@@ -156,9 +163,16 @@
           "order": {
             "type": "number",
             "options": {
-              "grid_columns": 6
+              "grid_columns": 3
             },
             "title": "Pozycja"
+          },
+          "group": {
+            "type": "number",
+            "options": {
+              "grid_columns": 3
+            },
+            "title": "Grupa"
           }
         }
       }
