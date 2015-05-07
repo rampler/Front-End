@@ -56,3 +56,13 @@ $('#osm-checkbox').change(function () {
     else
         $('#osm-checkbox_label').attr('title', "Włącz OSM").tooltip('fixTitle').tooltip('show');
 });
+
+$('#tilesLayerTab').click(function(){
+    layers[1].setVisible(true);
+    layers[2].setVisible(false);
+});
+
+$('#vectorsLayerTab').click(function(){
+    layers[1].setVisible(false);
+    layers[2].setVisible(true);
+});

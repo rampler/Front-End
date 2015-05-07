@@ -1,7 +1,25 @@
-var OsmMap = new ol.layer.Tile({source: new ol.source.MapQuest({layer: 'osm'})});
+var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'})});
 
-var vector_layer = new ol.layer.Vector({
-    name: 'my_vectorlayer',
+var TMSSource = new ol.source.XYZ({
+    projection: 'EPSG:900913'
+    , url: "http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg"
+
+});
+
+//var TSMTEMPSource = new ol.source.XYZ({
+//    url: "http://tilecache.osgeo.org/wms-c/Basic.py/"
+//});
+
+var tileLayer = new ol.layer.Tile({
+    source : TMSSource
+});
+
+var vectorLayer = new ol.layer.Vector({
+    visible: false
+});
+
+var addingLayer = new ol.layer.Vector({
+    name: 'addingLayer',
     source: new ol.source.Vector(),
     style: new ol.style.Style({
         fill: new ol.style.Fill({
@@ -20,7 +38,7 @@ var vector_layer = new ol.layer.Vector({
     })
 });
 
-var layers = [OsmMap, vector_layer];
+var layers = [OsmMap, tileLayer, vectorLayer, addingLayer];
 
 var map = new ol.Map({
     target: 'map',
@@ -28,7 +46,8 @@ var map = new ol.Map({
     controls: [new ol.control.Zoom, new ol.control.ScaleLine],
     view: new ol.View({
         center: [2000000, 6800000],
-        zoom: 6
+        zoom: 6,
+        projection: 'EPSG:900913'
     })
 });
 
@@ -58,7 +77,7 @@ function addDrawInteraction() {
     map.removeInteraction(select_interaction);
 
     draw_interaction = new ol.interaction.Draw({
-        source: vector_layer.getSource(),
+        source: addingLayer.getSource(),
         type: ("LineString"),
         style: new ol.style.Style({
             fill: new ol.style.Fill({
@@ -87,7 +106,7 @@ addDrawInteraction();
 
 function getJSONcoordinates() {
     var data_type = 'GeoJSON', format = new ol.format[data_type](), data;
-    try { data = format.writeFeatures(vector_layer.getSource().getFeatures()); }
+    try { data = format.writeFeatures(addingLayer.getSource().getFeatures()); }
     catch (e) {
         console.log(e.name + ": " + e.message);
         return;
@@ -96,7 +115,7 @@ function getJSONcoordinates() {
 }
 
 function clearDrawings() {
-    vector_layer.getSource().clear();
+    addingLayer.getSource().clear();
     if (select_interaction) {
         select_interaction.getFeatures().clear();
     }
