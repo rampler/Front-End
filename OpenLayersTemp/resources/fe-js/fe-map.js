@@ -1,5 +1,7 @@
 var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'})});
 
+var actualMode = 'draw';
+
 var TMSSource = new ol.source.XYZ({
     projection: 'EPSG:900913'
     , url: "http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg"
@@ -57,8 +59,10 @@ var select_interaction,
 var $interaction_type = $('[name="interaction_type"]');
 $interaction_type.on('change', function(e) {
     if (this.value === 'draw') {
+        actualMode = 'draw';
         addDrawInteraction();
     } else {
+        actualMode = 'edit';
         addModifyInteraction();
     }
 });

@@ -42,7 +42,7 @@ $('#addModal').on('hidden.bs.modal', function (e) {
 
 /** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
-    if (event.keyCode == 27) {
+    if (event.keyCode == 27 && actualMode == 'draw') {
         map.removeInteraction(draw_interaction);
         map.addInteraction(draw_interaction);
     }
