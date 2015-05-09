@@ -3,8 +3,7 @@ var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'})});
 var actualMode = 'draw';
 
 var TMSSource = new ol.source.XYZ({
-    projection: 'EPSG:900913'
-    , url: "http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg"
+     url: "http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg"
 
 });
 
@@ -40,16 +39,22 @@ var addingLayer = new ol.layer.Vector({
     })
 });
 
-var layers = [OsmMap, tileLayer, vectorLayer, addingLayer];
+var editingLayer = new ol.layer.Vector({
+    name: 'editingLayer',
+    source: new ol.source.Vector(),
+    style: addingLayer.getStyle(),
+    visible: false
+});
+
+var layers = [OsmMap, tileLayer, vectorLayer, addingLayer, editingLayer];
 
 var map = new ol.Map({
     target: 'map',
     layers: layers,
     controls: [new ol.control.Zoom, new ol.control.ScaleLine],
     view: new ol.View({
-        center: [2000000, 6800000],
-        zoom: 6,
-        projection: 'EPSG:900913'
+        center: ol.proj.transform([19.11260778620994, 52.22859848756548], 'EPSG:4326', 'EPSG:3857'),
+        zoom: 6
     })
 });
 
@@ -69,12 +74,43 @@ $interaction_type.on('change', function(e) {
 
 function addModifyInteraction() {
     map.removeInteraction(draw_interaction);
-    select_interaction = new ol.interaction.Select({
-        layers: function(vector_layer) {
-            return vector_layer.get('name') === 'my_vectorlayer';
-        }
+
+    select_interaction = new ol.interaction.Draw({
+        source: editingLayer.getSource(),
+        type: ("Point"),
+        style: new ol.style.Style({
+            fill: new ol.style.Fill({
+                color: 'rgba(255, 255, 255, 0.2)',
+                width: 1
+            }),
+            stroke: new ol.style.Stroke({
+                color: 'rgba(0, 126, 0, 0.7)',
+                width: 5
+            }),
+            image: new ol.style.Circle({
+                radius: 6,
+                fill: new ol.style.Fill({
+                    color: 'rgba(0, 126, 0, 0.7)'
+                })
+            })
+        })
     });
     map.addInteraction(select_interaction);
+    select_interaction.on('drawend', function(event) {
+        var coordEPSG387 = getJSONcoordinates(editingLayer);
+        var coordWGS84 = ol.proj.transform([coordEPSG387[0], coordEPSG387[1]],"EPSG:3857", "EPSG:4326");
+        var distance = 1; //TODO in future - modify
+        $.ajax({url: 'getNearestRoadSegment.php?lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
+            data = JSON.parse(data);
+            console.log(data);
+            if(!data.error)
+                initializeJsonEditor(data,'edit');
+            else {
+                alert(data.error);
+                clearDrawings();
+            }
+        });
+    });
 }
 
 function addDrawInteraction() {
@@ -102,15 +138,15 @@ function addDrawInteraction() {
     });
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {
-        initializeJsonEditor(getEditorValues(getJSONcoordinates()));
+        initializeJsonEditor(getEditorValues(getJSONcoordinates(addingLayer)),'add');
     });
 }
 
 addDrawInteraction();
 
-function getJSONcoordinates() {
+function getJSONcoordinates(layer) {
     var data_type = 'GeoJSON', format = new ol.format[data_type](), data;
-    try { data = format.writeFeatures(addingLayer.getSource().getFeatures()); }
+    try { data = format.writeFeatures(layer.getSource().getFeatures()); }
     catch (e) {
         console.log(e.name + ": " + e.message);
         return;
@@ -120,9 +156,7 @@ function getJSONcoordinates() {
 
 function clearDrawings() {
     addingLayer.getSource().clear();
-    if (select_interaction) {
-        select_interaction.getFeatures().clear();
-    }
+    editingLayer.getSource().clear();
 }
 
 

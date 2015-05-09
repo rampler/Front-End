@@ -13,8 +13,9 @@
     $clickedPointLon = $_GET['lon'];
     $searchingDistance = $_GET['dist'];
 
-    //Walidacja pól przed rozpoczêciem dzia³añ
-    if (preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) ) {
+    //Walidacja pÃ³l przed rozpoczÄ™ciem dziaÅ‚aÅ„
+    if ($clickedPointLat != null && $clickedPointLon != null && $searchingDistance != null && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) ) {
+//        $startTime = round(microtime(true)*1000); //TODO - test time
         $result = pg_prepare($dbconn, "roadSegmentQuery", 'select * from roadsegment where id in (select roadsegmentid from roadsegmentcoordinates where point('.$clickedPointLat.','.$clickedPointLon.') <-> coordinates < '.$searchingDistance.' order by point('.$clickedPointLat.','.$clickedPointLon.') <-> coordinates asc limit 1)');
         $result = pg_execute($dbconn, "roadSegmentQuery", array());
 
@@ -22,49 +23,52 @@
         while($rek = pg_fetch_array($result)) {
             $roadSegment['id'] = $rek['id'];
             $roadSegment['street'] = $rek['street'];
-            $roadSegment['mainLightningClass'] = $rek['mainLightningClass'];
+            $roadSegment['mainLightningClass'] = $rek['mainlightingclass'];
             $roadSegment['desc'] = $rek['desc'];
-            $roadSegment['lampArrangement'] = $rek['lampArrangement'];
+            $roadSegment['lampArrangement'] = $rek['lamparrangement'];
         }
 
-        $result = pg_prepare($dbconn, "roadSectionQuery", "select * from roadsection where roadsegmentid = '".$roadSegment['id']."'");
-        $result = pg_execute($dbconn, "roadSectionQuery", array());
+        if($roadSegment != null) {
+            $result = pg_prepare($dbconn, "roadSectionQuery", "select * from roadsection where roadsegmentid = '" . $roadSegment['id'] . "'");
+            $result = pg_execute($dbconn, "roadSectionQuery", array());
 
-        $sectionsArray = array();
-        while($rek = pg_fetch_array($result)) {
-            $section['id'] = $rek['id'];
-            $section['idx'] = $rek['idx'];
-            $section['type'] = $rek['type'];
-            $section['widthStart'] = $rek['widthstart'];
-            $section['widthEnd'] = $rek['widthend'];
-            $section['elevationStart'] = $rek['elevationstart'];
-            $section['elevationEnd'] = $rek['elevationend'];
-            $section['roadSurfaceId'] = $rek['roadsurfaceid'];
-            $section['lightingClassId'] = $rek['lightingclassid'];
-            $section['numberOfLines'] = null; //TODO - kolejny request
-            $sectionsArray[] = $section;
+            $sectionsArray = array();
+            while ($rek = pg_fetch_array($result)) {
+                $section['id'] = $rek['id'];
+                $section['idx'] = $rek['idx'];
+                $section['type'] = $rek['type'];
+                $section['widthStart'] = $rek['widthstart'];
+                $section['widthEnd'] = $rek['widthend'];
+                $section['elevationStart'] = $rek['elevationstart'];
+                $section['elevationEnd'] = $rek['elevationend'];
+                $section['roadSurfaceId'] = $rek['roadsurfaceid'];
+                $section['lightingClassId'] = $rek['lightingclassid'];
+                $section['numberOfLines'] = null; //TODO - kolejny request
+                $sectionsArray[] = $section;
+            }
+            $roadSegment['roadSection'] = $sectionsArray;
+
+            $result = pg_prepare($dbconn, "coordinatesQuery", "select * from roadsegmentcoordinates where roadsegmentid = '" . $roadSegment['id'] . "'");
+            $result = pg_execute($dbconn, "coordinatesQuery", array());
+
+            $coordinatesArray = array();
+            while ($rek = pg_fetch_array($result)) {
+                $coordinates['lat'] = strtok(substr($rek['coordinates'], 1, strlen($rek['coordinates']) - 2), ",");
+                $coordinates['lon'] = strtok(",");
+                $coordinates['elev'] = $rek['elev'];
+                $coordinates['order'] = $rek['order'];
+                $coordinates['group'] = $rek['group'];
+                $coordinatesArray[] = $coordinates;
+            }
+//        echo (round(microtime(true)*1000)-$startTime); //TODO - test time
+
+            $roadSegment['coordinates'] = $coordinatesArray;
+            echo json_encode($roadSegment);
         }
-        $roadSegment['roadSection'] = $sectionsArray;
-
-        $result = pg_prepare($dbconn, "coordinatesQuery", "select * from roadsegmentcoordinates where roadsegmentid = '".$roadSegment['id']."'");
-        $result = pg_execute($dbconn, "coordinatesQuery", array());
-
-        $coordinatesArray = array();
-        while($rek = pg_fetch_array($result)) {
-            $coordinates['coordinates'] = $rek['coordinates']; //TODO zamiana na lat i lon
-            $coordinates['elev'] = $rek['elev'];
-            $coordinates['order'] = $rek['order'];
-            $coordinates['group'] = $rek['group'];
-            $coordinatesArray[] = $coordinates;
-        }
-
-        $roadSegment['coordinates'] = $coordinatesArray;
-
-//        print_r($roadSegment); //TODO zwracaæ segment w json
-        echo json_encode($roadSegment);
-    } else {
-        echo 'B³êdne parametry zapytania'; //TODO zwracaæ JSON b³êdu
-    }
+        else
+            echo '{"error":"Nie znaleziono segmentu drogi w pobliÅ¼u wskazanego miejsca"}';
+    } else
+        echo '{"error":"BÅ‚Ä™dne parametry zapytania"}';
 
 
 ?>

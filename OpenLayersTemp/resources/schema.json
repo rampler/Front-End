@@ -1,6 +1,6 @@
 {
   "type": "object",
-  "title": "Nowy segment drogi",
+  "title": "Segment drogi",
   "format": "grid",
   "properties": {
     "id": {
@@ -139,14 +139,14 @@
         "format": "grid",
         "headerTemplate": "Punkt: {{ self.order }}",
         "properties": {
-          "lon": {
+          "lat": {
             "type": "number",
             "options": {
               "grid_columns": 6
             },
             "title": "Szerokość geograficzna"
           },
-          "lat": {
+          "lon": {
             "type": "number",
             "options": {
               "grid_columns": 6

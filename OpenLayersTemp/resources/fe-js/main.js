@@ -5,24 +5,29 @@
 $('[data-toggle="tooltip"]').tooltip();
 
 var addForm = document.getElementById('addForm');
+var editForm = document.getElementById('editForm');
 var jsonEditor;
 var schema;
 
-function initializeJsonEditor(jsonValues) {
-    addForm.innerHTML = null;
+function initializeJsonEditor(jsonValues,action) {
+    if(action == 'add')
+        addForm.innerHTML = null;
+    else
+        editForm.innerHTML = null;
+
     if(!schema) {
         $.ajax("resources/schema.json")
             .done(function (data) {
                 schema = data;
-                buildJsonEditor(jsonValues);
+                buildJsonEditor(jsonValues,action);
             });
-    }
-    else
-        buildJsonEditor(jsonValues);
+    } else
+        buildJsonEditor(jsonValues,action);
 }
 
-function buildJsonEditor(jsonValues){
-    jsonEditor = new JSONEditor(addForm, {
+function buildJsonEditor(jsonValues,action){
+    schema.title = (action == 'add') ? 'Nowy segment drogi' : 'Edytuj segment drogi';
+    jsonEditor = new JSONEditor((action == 'add') ? addForm : editForm, {
         theme: 'bootstrap3',
         disable_edit_json: true,
         disable_properties: true,
@@ -32,13 +37,16 @@ function buildJsonEditor(jsonValues){
     });
     if(jsonValues)
         jsonEditor.setValue(jsonValues);
-    $('#addModal').modal('show');
+
+    if(action == 'add')
+        $('#addModal').modal('show');
+    else
+        $('#editModal').modal('show');
 }
 
 /** Action on modal hiding **/
-$('#addModal').on('hidden.bs.modal', function (e) {
-    clearDrawings();
-});
+$('#addModal').on('hidden.bs.modal', clearDrawings);
+$('#editModal').on('hidden.bs.modal', clearDrawings);
 
 /** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
