@@ -2,6 +2,8 @@
  * Created by Mateusz on 2015-05-10.
  */
 
+JSONEditor.defaults.languages.en = {error_notset: "Pole jest wymagane"};
+
 var FEFunctions = {
     schema : null,
     alertModalHead : '<div class="fe-alert"><div class="alert alert-dismissible fade" role="alert" style="margin:0;"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
@@ -34,6 +36,7 @@ var FEFunctions = {
             disable_properties: true,
             disable_collapse: true,
             form_name_root: "T",
+            show_errors: "always",
             schema: FEFunctions.schema
         });
         if(jsonValues)

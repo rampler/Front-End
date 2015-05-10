@@ -29,41 +29,50 @@ $('#osm-checkbox').change(function () {
         $('#osm-checkbox_label').attr('title', "Włącz OSM").tooltip('fixTitle').tooltip('show');
 });
 
-$('#tilesLayerTab').click(function(){
+$('#tilesLayerTab').click(function () {
     layers[1].setVisible(true);
     layers[2].setVisible(false);
 });
 
-$('#vectorsLayerTab').click(function(){
+$('#vectorsLayerTab').click(function () {
     layers[1].setVisible(false);
     layers[2].setVisible(true);
 });
 
-$('#deleteBtn').click(function(){
+$('#deleteBtn').click(function () {
     $('#deleteModal').modal('show');
 });
 
-$('#deleteConfirmedBtn').click(function(){
+$('#deleteConfirmedBtn').click(function () {
     var $btn = $(this).button('loading');
     //TODO ajax do php odpowiedzialnego za usuwanie
     $btn.button('reset');
     $('#deleteModal').modal('hide');
     $('#editModal').modal('hide');
-    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie usunięto segment drogi!','success');
+    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie usunięto segment drogi!', 'success');
 });
 
-$('#addBtn').click(function(){
-    var $btn = $(this).button('loading');
-    //TODO ajax do php odpowiedzialnego za dodawanie segmentu
-    $btn.button('reset');
-    $('#addModal').modal('hide');
-    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie dodano segment drogi!','success');
+$('#addBtn').click(function () {
+    if (!(jsonEditor.validate().length)) {
+        var $btn = $(this).button('loading');
+        //TODO ajax do php odpowiedzialnego za dodawanie segmentu
+        $btn.button('reset');
+        $('#addModal').modal('hide');
+        FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie dodano segment drogi!', 'success');
+    }
+    else
+        FEFunctions.showAlert('Nie wszystkie wymagane pola zostały podane!', 'danger');
+
 });
 
-$('#editBtn').click(function(){
-    var $btn = $(this).button('loading');
-    //TODO ajax do php odpowiedzialnego za edycję segmentu
-    $btn.button('reset');
-    $('#editModal').modal('hide');
-    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!','success');
+$('#saveBtn').click(function () {
+    if (!(jsonEditor.validate().length)) {
+        var $btn = $(this).button('loading');
+        //TODO ajax do php odpowiedzialnego za edycję segmentu
+        $btn.button('reset');
+        $('#editModal').modal('hide');
+        FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!', 'success');
+    }
+    else
+        FEFunctions.showAlert('Nie wszystkie wymagane pola zostały podane!', 'danger');
 });

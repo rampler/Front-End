@@ -5,15 +5,18 @@
   "properties": {
     "id": {
       "type": "string",
-      "title": "ID"
+      "title": "ID",
+      "required": true
     },
     "street": {
       "type": "string",
-      "title": "Nazwa ulicy"
+      "title": "Nazwa ulicy",
+      "required": true
     },
     "mainLightningClass": {
       "type": "string",
-      "title": "Klasa oświetleniowa"
+      "title": "Klasa oświetleniowa",
+      "required": true
     },
     "desc": {
       "type": "string",
@@ -172,7 +175,8 @@
             "options": {
               "grid_columns": 3
             },
-            "title": "Grupa"
+            "title": "Grupa",
+            "required": true
           }
         }
       }

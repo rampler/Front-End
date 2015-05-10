@@ -21,7 +21,7 @@ function getEditorValues(jsonCoordinates) {
             'lon': tempCoord[0],
             'order': i+1,
             'elev': 0,
-            'group': 0
+            'group': 1
         };
     }
     var result = defaultValues;
