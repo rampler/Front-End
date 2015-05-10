@@ -6,17 +6,17 @@
     "id": {
       "type": "string",
       "title": "ID",
-      "required": true
+      "minLength": 1
     },
     "street": {
       "type": "string",
       "title": "Nazwa ulicy",
-      "required": true
+      "minLength": 1
     },
     "mainLightningClass": {
       "type": "string",
       "title": "Klasa oświetleniowa",
-      "required": true
+      "minLength": 1
     },
     "desc": {
       "type": "string",
@@ -143,40 +143,47 @@
         "headerTemplate": "Punkt: {{ self.order }}",
         "properties": {
           "lat": {
-            "type": "number",
+            "type": "string",
             "options": {
               "grid_columns": 6
             },
-            "title": "Szerokość geograficzna"
+            "title": "Szerokość geograficzna",
+            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "minLength": 1
           },
           "lon": {
-            "type": "number",
+            "type": "string",
             "options": {
               "grid_columns": 6
             },
-            "title": "Długość geograficzna"
+            "title": "Długość geograficzna",
+            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "minLength": 1
           },
           "elev": {
-            "type": "number",
+            "type": "string",
             "options": {
               "grid_columns": 6
             },
             "title": "Wysokość geograficzna"
           },
           "order": {
-            "type": "number",
+            "type": "string",
             "options": {
               "grid_columns": 3
             },
-            "title": "Pozycja"
+            "title": "Pozycja",
+            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "minLength": 1
           },
           "group": {
-            "type": "number",
+            "type": "string",
             "options": {
               "grid_columns": 3
             },
             "title": "Grupa",
-            "required": true
+            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "minLength": 1
           }
         }
       }

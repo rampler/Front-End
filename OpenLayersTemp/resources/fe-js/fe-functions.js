@@ -2,7 +2,11 @@
  * Created by Mateusz on 2015-05-10.
  */
 
-JSONEditor.defaults.languages.en = {error_notset: "Pole jest wymagane"};
+JSONEditor.defaults.languages.en = {
+    error_notset: "Pole jest wymagane",
+    error_pattern: "Błędna wartość pola",
+    error_notempty: "Pole jest wymagane"
+};
 
 var FEFunctions = {
     schema : null,

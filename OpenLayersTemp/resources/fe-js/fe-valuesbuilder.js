@@ -17,11 +17,11 @@ function getEditorValues(jsonCoordinates) {
     for(var i=0; i<jsonCoordinates.length; i++) {
         var tempCoord = ol.proj.transform([jsonCoordinates[i][0], jsonCoordinates[i][1]],"EPSG:3857", "EPSG:4326");
         coordinates[i] = {
-            'lat': tempCoord[1],
-            'lon': tempCoord[0],
-            'order': i+1,
-            'elev': 0,
-            'group': 1
+            'lat': tempCoord[1]+"",
+            'lon': tempCoord[0]+"",
+            'order': i+1+"",
+            'elev': "",
+            'group': ""
         };
     }
     var result = defaultValues;
