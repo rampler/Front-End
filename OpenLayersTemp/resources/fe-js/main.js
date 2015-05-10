@@ -7,42 +7,6 @@ $('[data-toggle="tooltip"]').tooltip();
 var addForm = document.getElementById('addForm');
 var editForm = document.getElementById('editForm');
 var jsonEditor;
-var schema;
-
-function initializeJsonEditor(jsonValues,action) {
-    if(action == 'add')
-        addForm.innerHTML = null;
-    else
-        editForm.innerHTML = null;
-
-    if(!schema) {
-        $.ajax("resources/schema.json")
-            .done(function (data) {
-                schema = data;
-                buildJsonEditor(jsonValues,action);
-            });
-    } else
-        buildJsonEditor(jsonValues,action);
-}
-
-function buildJsonEditor(jsonValues,action){
-    schema.title = (action == 'add') ? 'Nowy segment drogi' : 'Edytuj segment drogi';
-    jsonEditor = new JSONEditor((action == 'add') ? addForm : editForm, {
-        theme: 'bootstrap3',
-        disable_edit_json: true,
-        disable_properties: true,
-        disable_collapse: true,
-        form_name_root: "T",
-        schema: schema
-    });
-    if(jsonValues)
-        jsonEditor.setValue(jsonValues);
-
-    if(action == 'add')
-        $('#addModal').modal('show');
-    else
-        $('#editModal').modal('show');
-}
 
 /** Action on modal hiding **/
 $('#addModal').on('hidden.bs.modal', clearDrawings);
@@ -73,4 +37,30 @@ $('#tilesLayerTab').click(function(){
 $('#vectorsLayerTab').click(function(){
     layers[1].setVisible(false);
     layers[2].setVisible(true);
+});
+
+$('#deleteBtn').click(function(){
+    $('#deleteModal').modal('show');
+});
+
+$('#deleteConfirmedBtn').click(function(){
+    var $btn = $(this).button('loading');
+    //TODO ajax do php odpowiedzialnego za usuwanie
+    $btn.button('reset');
+    $('#deleteModal').modal('hide');
+    $('#editModal').modal('hide');
+});
+
+$('#addBtn').click(function(){
+    var $btn = $(this).button('loading');
+    //TODO ajax do php odpowiedzialnego za dodawanie segmentu
+    $btn.button('reset');
+    $('#addModal').modal('hide');
+});
+
+$('#editBtn').click(function(){
+    var $btn = $(this).button('loading');
+    //TODO ajax do php odpowiedzialnego za edycję segmentu
+    $btn.button('reset');
+    $('#editModal').modal('hide');
 });

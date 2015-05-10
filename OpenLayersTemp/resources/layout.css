@@ -80,9 +80,14 @@ input[name=interaction_type] {
     width: 100%;
 }
 
-.modal-add-dialog {
+.modal-add-dialog, .modal-edit-dialog {
     width: 70%;
     margin-top: 10px;
+}
+
+.modal-delete-dialog {
+    width: 40%;
+    margin-top: calc( 50vh - 100px );
 }
 
 h3 {
@@ -106,4 +111,8 @@ h3 {
 .modal-add-body .btn {
     font-size: 12px;
     padding: 3px 12px;
+}
+
+.modal-backdrop {
+    opacity: 0 !important;
 }

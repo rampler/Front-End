@@ -1,4 +1,4 @@
-var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'})});
+var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'}), visible: false});
 
 var actualMode = 'draw';
 
@@ -102,11 +102,10 @@ function addModifyInteraction() {
         var distance = 1; //TODO in future - modify
         $.ajax({url: 'getNearestRoadSegment.php?lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
             data = JSON.parse(data);
-            console.log(data);
             if(!data.error)
-                initializeJsonEditor(data,'edit');
+                FEFunctions.initializeJsonEditor(data,'edit');
             else {
-                alert(data.error);
+                FEFunctions.showAlert(data.error);
                 clearDrawings();
             }
         });
@@ -138,7 +137,7 @@ function addDrawInteraction() {
     });
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {
-        initializeJsonEditor(getEditorValues(getJSONcoordinates(addingLayer)),'add');
+        FEFunctions.initializeJsonEditor(getEditorValues(getJSONcoordinates(addingLayer)),'add');
     });
 }
 
