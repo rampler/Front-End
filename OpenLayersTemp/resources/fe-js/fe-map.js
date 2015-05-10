@@ -105,7 +105,7 @@ function addModifyInteraction() {
             if(!data.error)
                 FEFunctions.initializeJsonEditor(data,'edit');
             else {
-                FEFunctions.showAlert(data.error);
+                FEFunctions.showAlert(data.error, 'danger');
                 clearDrawings();
             }
         });

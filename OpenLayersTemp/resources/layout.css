@@ -116,3 +116,11 @@ h3 {
 .modal-backdrop {
     opacity: 0 !important;
 }
+
+.fe-alert {
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    padding: 0 25%;
+}

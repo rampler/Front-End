@@ -49,6 +49,7 @@ $('#deleteConfirmedBtn').click(function(){
     $btn.button('reset');
     $('#deleteModal').modal('hide');
     $('#editModal').modal('hide');
+    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie usunięto segment drogi!','success');
 });
 
 $('#addBtn').click(function(){
@@ -56,6 +57,7 @@ $('#addBtn').click(function(){
     //TODO ajax do php odpowiedzialnego za dodawanie segmentu
     $btn.button('reset');
     $('#addModal').modal('hide');
+    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie dodano segment drogi!','success');
 });
 
 $('#editBtn').click(function(){
@@ -63,4 +65,5 @@ $('#editBtn').click(function(){
     //TODO ajax do php odpowiedzialnego za edycję segmentu
     $btn.button('reset');
     $('#editModal').modal('hide');
+    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!','success');
 });
