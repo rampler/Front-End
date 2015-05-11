@@ -45,34 +45,57 @@ $('#deleteBtn').click(function () {
 
 $('#deleteConfirmedBtn').click(function () {
     var $btn = $(this).button('loading');
-    //TODO ajax do php odpowiedzialnego za usuwanie
-    $btn.button('reset');
-    $('#deleteModal').modal('hide');
-    $('#editModal').modal('hide');
-    FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie usunięto segment drogi!', 'success');
+    $.ajax({
+        url: 'deleteRoadSegment.php',
+        type: 'POST',
+        data: {
+            roadSegmentId: jsonEditor.getValue().id
+        }
+    }).done(function (data) {
+        data = JSON.parse(data);
+        $btn.button('reset');
+        $('#deleteModal').modal('hide');
+        $('#editModal').modal('hide');
+        FEFunctions.showAlert(data.message, data.type);
+    });
 });
 
 $('#addBtn').click(function () {
     if (!(jsonEditor.validate().length)) {
         var $btn = $(this).button('loading');
-        //TODO ajax do php odpowiedzialnego za dodawanie segmentu
-        $btn.button('reset');
-        $('#addModal').modal('hide');
-        FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie dodano segment drogi!', 'success');
+        $.ajax({
+            url: 'addRoadSegment.php',
+            type: 'POST',
+            data: {
+                json: jsonEditor.getValue()
+            }
+        }).done(function (data) {
+            data = JSON.parse(data);
+            $btn.button('reset');
+            $('#addModal').modal('hide');
+            FEFunctions.showAlert(data.message, data.type);
+        });
     }
     else
-        FEFunctions.showAlert('Nie wszystkie wymagane pola zostały podane!', 'danger');
-
+        FEFunctions.showAlert('Nie wszystkie wymagane pola są poprawne!', 'danger');
 });
 
 $('#saveBtn').click(function () {
     if (!(jsonEditor.validate().length)) {
         var $btn = $(this).button('loading');
-        //TODO ajax do php odpowiedzialnego za edycję segmentu
-        $btn.button('reset');
-        $('#editModal').modal('hide');
-        FEFunctions.showAlert('<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!', 'success');
+        $.ajax({
+            url: 'saveRoadSegment.php',
+            type: 'POST',
+            data: {
+                json: jsonEditor.getValue()
+            }
+        }).done(function (data) {
+            data = JSON.parse(data);
+            $btn.button('reset');
+            $('#editModal').modal('hide');
+            FEFunctions.showAlert(data.message, data.type);
+        });
     }
     else
-        FEFunctions.showAlert('Nie wszystkie wymagane pola zostały podane!', 'danger');
+        FEFunctions.showAlert('Nie wszystkie wymagane pola są poprawne!', 'danger');
 });
