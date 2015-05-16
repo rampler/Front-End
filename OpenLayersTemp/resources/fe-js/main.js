@@ -6,11 +6,16 @@ $('[data-toggle="tooltip"]').tooltip();
 
 var addForm = document.getElementById('addForm');
 var editForm = document.getElementById('editForm');
+var $addBtn = $('#addBtn');
+var $addModal = $('#addModal');
+var $editModal = $('#editModal');
 var jsonEditor;
 
 /** Action on modal hiding **/
-$('#addModal').on('hidden.bs.modal', clearDrawings);
-$('#editModal').on('hidden.bs.modal', clearDrawings);
+$addModal.on('hidden.bs.modal', clearDrawings);
+$editModal.on('hidden.bs.modal', clearDrawings);
+$addModal.on('shown.bs.modal',addActionsOnModalShow);
+$editModal.on('shown.bs.modal',addActionsOnModalShow);
 
 /** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
@@ -55,12 +60,12 @@ $('#deleteConfirmedBtn').click(function () {
         data = JSON.parse(data);
         $btn.button('reset');
         $('#deleteModal').modal('hide');
-        $('#editModal').modal('hide');
+        $editModal.modal('hide');
         FEFunctions.showAlert(data.message, data.type);
     });
 });
 
-$('#addBtn').click(function () {
+$addBtn.click(function () {
     if (!(jsonEditor.validate().length)) {
         var $btn = $(this).button('loading');
         $.ajax({
@@ -72,7 +77,7 @@ $('#addBtn').click(function () {
         }).done(function (data) {
             data = JSON.parse(data);
             $btn.button('reset');
-            $('#addModal').modal('hide');
+            $addModal.modal('hide');
             FEFunctions.showAlert(data.message, data.type);
         });
     }
@@ -92,10 +97,43 @@ $('#saveBtn').click(function () {
         }).done(function (data) {
             data = JSON.parse(data);
             $btn.button('reset');
-            $('#editModal').modal('hide');
+            $editModal.modal('hide');
             FEFunctions.showAlert(data.message, data.type);
         });
     }
     else
         FEFunctions.showAlert('Nie wszystkie wymagane pola są poprawne!', 'danger');
 });
+
+//Focus chain - additional function
+$addBtn.focus(function(){
+    var $containerCoordinates = $('.container-coordinates');
+    var pointsTabs = $('a.list-group-item', $containerCoordinates);
+    var index = 0;
+
+    for(var i=0; i<pointsTabs.length; i++)
+        if($(pointsTabs[i]).hasClass('active'))
+            index = i;
+
+    if(index != pointsTabs.length-1) {
+        $(pointsTabs[index+1])[0].click();
+        $('.container-lat input').focus();
+    }
+});
+
+function addActionsOnModalShow() {
+    $('.container-coordinates .json-editor-btn-add').focus(function () {
+        var $containerRoadSection = $('.container-roadSection');
+        var sectionsTabs = $('a.list-group-item', $containerRoadSection);
+        var index = 0;
+
+        for (var i = 0; i < sectionsTabs.length; i++)
+            if ($(sectionsTabs[i]).hasClass('active'))
+                index = i;
+
+        if (index != sectionsTabs.length - 1) {
+            $(sectionsTabs[index + 1])[0].click();
+            $('.container-id input', $containerRoadSection).focus();
+        }
+    });
+}
