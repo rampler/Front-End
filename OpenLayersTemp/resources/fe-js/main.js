@@ -68,6 +68,7 @@ $('#deleteConfirmedBtn').click(function () {
 
 $addBtn.click(function () {
     if (!(jsonEditor.validate().length)) {
+        console.log(JSON.stringify(jsonEditor.getValue())); //TODO to erase
         var $btn = $(this).button('loading');
         $.ajax({
             url: 'addRoadSegment.php',
