@@ -6,7 +6,7 @@
  * Time: 19:38
  */
 
-    $dbconn = pg_connect("host=localhost dbname=frontend user=frontend password=frontend")
+    $dbconn = pg_connect("host=localhost dbname=frontend2 user=frontend password=frontend")
     or die("Can't connect to database".pg_last_error());
 
     $clickedPointLat = $_GET['lat'];
