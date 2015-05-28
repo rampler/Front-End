@@ -1,0 +1,6 @@
+﻿INSERT INTO roadSegment ("id","street","mainlightingclass","desc","lamparrangement") VALUES ('czarnowiejska-str','Czarnowiejska',null,'Opis ulicy Czarnowiejskiej','SINGLE_SIDED_RIGHT');
+INSERT INTO roadSection ("id","roadsegmentid","idx","type","numberoflanes","widthstart","widthend","elevationstart","elevationend","roadsurfaceid","lightingclassid") VALUES ('chodnik','czarnowiejska-str','1','walkway','1','2','2','1','1',null,null);
+INSERT INTO roadSection ("id","roadsegmentid","idx","type","numberoflanes","widthstart","widthend","elevationstart","elevationend","roadsurfaceid","lightingclassid") VALUES ('droga','czarnowiejska-str','2','road','2','7','7','1','1',null,null);
+INSERT INTO roadSegmentCoordinates ("roadsegmentid","elev","order","group","coordinates") VALUES ('czarnowiejska-str',null,'1','1',ST_GeomFromText('POINT(17.266904661209942 53.0948074429964)', 4326));
+INSERT INTO roadSegmentCoordinates ("roadsegmentid","elev","order","group","coordinates") VALUES ('czarnowiejska-str',null,'2','1',ST_GeomFromText('POINT(18.826963254959942 53.055205974222815)', 4326));
+INSERT INTO roadSegmentCoordinates ("roadsegmentid","elev","order","group","coordinates") VALUES ('czarnowiejska-str',null,'3','1',ST_GeomFromText('POINT(18.45342809870994 51.98568357340159)', 4326));

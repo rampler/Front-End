@@ -12,7 +12,7 @@
     $dbconn = pg_connect("host=localhost dbname=frontend2 user=frontend password=frontend")
     or die("Can't connect to database".pg_last_error());
 
-    $jtp = new JsonToPostgres();
+    $jtp = new JsonToPostgres("./lib/config.json");
 
     $sqls = $jtp->createSqlStatements(json_encode($_POST['json']));
 

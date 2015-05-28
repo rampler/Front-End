@@ -23,7 +23,7 @@
         while($rek = pg_fetch_array($result)) {
             $roadSegment['id'] = $rek['id'];
             $roadSegment['street'] = $rek['street'];
-            $roadSegment['mainLightningClass'] = $rek['mainlightingclass'];
+            $roadSegment['mainLightingClass'] = $rek['mainlightingclass'];
             $roadSegment['desc'] = $rek['desc'];
             $roadSegment['lampArrangement'] = $rek['lamparrangement'];
         }

@@ -10,6 +10,10 @@
       "roadSegmentCoordinates":{
         "childId": "roadSegmentId",
         "parentId": "roadSegment_id"
+      },
+      "roadSection":{
+        "childId": "roadSegmentId",
+        "parentId": "roadSegment_id"
       }
     }
   }

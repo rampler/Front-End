@@ -162,14 +162,17 @@ class JsonToPostgres
             //dodanie cudzyslowow do nazw kolumn
             $colName = "\"" . strtolower($colName) . "\"";
 
-            //dodanie apostrofow do wartosci
-            $v = "'" . $v . "'";
+            //dodanie apostrofow do wartosci je¿eli nie s¹ liczb¹ lub null jezeli nie podano wartoœci
+            if(!$v)
+                $v = "null";
+            else if(!is_numeric($v))
+                $v="'" . $v . "'";
 
             $prepared[$i][$tableName][$colName] = $v;
 
             if ($addParentId != false) {
                 $addParentId[0] = "\"" . strtolower($addParentId[0]) . "\"";
-                $prepared[$i][$tableName][$addParentId[0]] = $array[$addParentId[1]];
+                $prepared[$i][$tableName][$addParentId[0]] = "'".$array[$addParentId[1]]."'";
             }
 
             $numeric = false;

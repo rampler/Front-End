@@ -13,7 +13,7 @@
       "title": "Nazwa ulicy",
       "minLength": 1
     },
-    "mainLightningClass": {
+    "mainLightingClass": {
       "type": "string",
       "title": "Klasa oświetleniowa",
       "minLength": 1
