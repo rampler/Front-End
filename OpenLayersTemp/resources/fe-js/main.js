@@ -12,6 +12,8 @@ var $addModal = $('#addModal');
 var $editModal = $('#editModal');
 var jsonEditor;
 
+FEFunctions.init();
+
 /** Action on modal hiding **/
 $addModal.on('hidden.bs.modal', clearDrawings);
 $editModal.on('hidden.bs.modal', clearDrawings);

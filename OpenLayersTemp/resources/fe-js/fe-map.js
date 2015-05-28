@@ -104,7 +104,7 @@ function addModifyInteraction() {
             console.log(data);
             data = JSON.parse(data);
             if(!data.error)
-                FEFunctions.initializeJsonEditor(data,'edit');
+                FEFunctions.buildJsonEditor(data,'edit');
             else {
                 FEFunctions.showAlert(data.error, 'danger');
                 clearDrawings();
@@ -138,7 +138,7 @@ function addDrawInteraction() {
     });
     map.addInteraction(draw_interaction);
     draw_interaction.on('drawend', function(event) {
-        FEFunctions.initializeJsonEditor(getEditorValues(getJSONcoordinates(addingLayer)),'add');
+        FEFunctions.buildJsonEditor(getEditorValues(getJSONcoordinates(addingLayer)),'add');
     });
 }
 

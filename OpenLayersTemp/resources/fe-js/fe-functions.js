@@ -14,6 +14,34 @@ var FEFunctions = {
     schema : null,
     alertModalHead : '<div class="fe-alert"><div class="alert alert-dismissible fade" role="alert" style="margin:0;"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
     alertModalFooter: '</div></div>',
+    init: function(){
+        $.ajax("resources/schema.json")
+            .done(function (data) {
+                FEFunctions.schema = data;
+
+                FEFunctions.addJsonEditor = new JSONEditor(addForm, {
+                    theme: 'bootstrap3',
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    disable_collapse: true,
+                    form_name_root: "T",
+                    show_errors: "always",
+                    schema: FEFunctions.schema,
+                    ajax: true
+                });
+
+                FEFunctions.editJsonEditor = new JSONEditor(editForm, {
+                    theme: 'bootstrap3',
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    disable_collapse: true,
+                    form_name_root: "T",
+                    show_errors: "always",
+                    schema: FEFunctions.schema,
+                    ajax: true
+                });
+            });
+    },
     showAlert : function(alertMessage, alertType) {
         if(!alertType)
             alertType = 'danger';
@@ -37,90 +65,53 @@ var FEFunctions = {
     buildJsonEditor : function(jsonValues,action){
         FEFunctions.schema.title = (action == 'add') ? 'Nowy segment drogi' : 'Edytuj segment drogi';
         if(action == "add") {
-            if(!this.addJsonEditor) {
-                this.addJsonEditor = new JSONEditor(addForm, {
-                    theme: 'bootstrap3',
-                    disable_edit_json: true,
-                    disable_properties: true,
-                    disable_collapse: true,
-                    form_name_root: "T",
-                    show_errors: "always",
-                    schema: FEFunctions.schema,
-                    ajax: true
-                });
-
-                this.addJsonEditor.on('ready', function () {
-                    $('#addModal').modal('show');
-                    FEFunctions.addJsonEditor.setValue(jsonValues);
-                });
-            }
-            else {
-                $('#addModal').modal('show');
-                FEFunctions.addJsonEditor.setValue(jsonValues);
-            }
+            $('#addModal').modal('show');
+            FEFunctions.addJsonEditor.setValue(jsonValues);
             jsonEditor = this.addJsonEditor;
         }
         else {
-            if(!this.editJsonEditor) {
-                this.editJsonEditor = new JSONEditor(editForm, {
-                    theme: 'bootstrap3',
-                    disable_edit_json: true,
-                    disable_properties: true,
-                    disable_collapse: true,
-                    form_name_root: "T",
-                    show_errors: "always",
-                    schema: FEFunctions.schema,
-                    ajax: true
-                });
-
-                this.editJsonEditor.on('ready', function () {
-                    $('#editModal').modal('show');
-                    FEFunctions.editJsonEditor.setValue(jsonValues);
-                });
-            }
-            else {
-                $('#editModal').modal('show');
-                FEFunctions.editJsonEditor.setValue(jsonValues);
-            }
+            $('#editModal').modal('show');
+            FEFunctions.editJsonEditor.setValue(jsonValues);
             jsonEditor = this.editJsonEditor;
         }
 
     },
-    initializeJsonEditor : function(jsonValues,action) {
-        if(!FEFunctions.schema) {
-            $.ajax("resources/schema.json")
-                .done(function (data) {
-                    FEFunctions.schema = data;
-                    FEFunctions.buildJsonEditor(jsonValues,action);
-                });
-        } else
-            FEFunctions.buildJsonEditor(jsonValues,action);
-    },
     focusOnNextPoint : function(){
-        var $containerCoordinates = $('.container-coordinates');
-        var pointsTabs = $('a.list-group-item', $containerCoordinates);
-        var index = 0;
+        var $containerCoordinates = $(this).closest('.modal').find('.container-coordinates');
+        var $pointsTabs = $('a.list-group-item', $containerCoordinates);
 
-        for(var i=0; i<pointsTabs.length; i++)
-            if($(pointsTabs[i]).hasClass('active'))
+        for(var j=0; j<$pointsTabs.length; j++) {
+            if($($pointsTabs[j]).css("display") == "none")
+                $pointsTabs[j].remove();
+        }
+
+        $pointsTabs = $('a.list-group-item', $containerCoordinates);
+        var index = 0;
+        for(var i=0; i<$pointsTabs.length; i++)
+            if($($pointsTabs[i]).hasClass('active'))
                 index = i;
 
-        if(index != pointsTabs.length-1 && pointsTabs.length) {
-            $(pointsTabs[index+1])[0].click();
+        if(index != $pointsTabs.length-1 && $pointsTabs.length != 0) {
+            $($pointsTabs[index+1])[0].click();
             $('.container-lat input').focus();
         }
     },
     focusOnNextSection : function(){
-        var $containerRoadSection = $('.container-roadSection');
-        var sectionsTabs = $('a.list-group-item', $containerRoadSection);
-        var index = 0;
+        var $containerRoadSection = $(this).closest('.modal').find('.container-roadSection');
+        var $sectionsTabs = $('a.list-group-item', $containerRoadSection);
+        for(var j=0; j<$sectionsTabs.length; j++) {
+            if($($sectionsTabs[j]).css("display") == "none")
+                $sectionsTabs[j].remove();
+        }
 
-        for (var i = 0; i < sectionsTabs.length; i++)
-            if ($(sectionsTabs[i]).hasClass('active'))
+        $sectionsTabs = $('a.list-group-item', $containerRoadSection);
+        var index = 0;
+        for (var i = 0; i < $sectionsTabs.length; i++)
+            if ($($sectionsTabs[i]).hasClass('active'))
                 index = i;
 
-        if (index != sectionsTabs.length - 1 && sectionsTabs.length) {
-            $(sectionsTabs[index + 1])[0].click();
+        if (index != $sectionsTabs.length - 1 && $sectionsTabs.length !=0) {
+            $($sectionsTabs[index + 1])[0].click();
             $('.container-id input', $containerRoadSection).focus();
         }
     }
