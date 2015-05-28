@@ -16,7 +16,7 @@
     "mainLightingClass": {
       "type": "string",
       "title": "Klasa oświetleniowa",
-      "minLength": 1
+      "$ref":  "./getLightningClasses.php"
     },
     "desc": {
       "type": "string",
@@ -121,14 +121,16 @@
             "options": {
               "grid_columns": 6
             },
-            "title": "Identyfikator typu powierzchni"
+            "title": "Identyfikator typu powierzchni",
+            "$ref":  "./getRoadSurfaces.php"
           },
           "lightingClassId": {
             "type": "string",
             "options": {
               "grid_columns": 6
             },
-            "title": "Identyfikator klasy oświetleniowej drogi"
+            "title": "Identyfikator klasy oświetleniowej drogi",
+            "$ref":  "./getLightningClasses.php"
           }
         }
       }

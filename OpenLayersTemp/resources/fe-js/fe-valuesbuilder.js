@@ -5,8 +5,8 @@
 var defaultValues = {
     "id":"",
     "street":"",
-    "mainLightingClass":"",
     "desc":"",
+    "mainLightingClass": "",
     "lampArrangement":"SINGLE_SIDED_RIGHT",
     "roadSection":[],
     "coordinates":[]

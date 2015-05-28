@@ -53,8 +53,8 @@ var map = new ol.Map({
     layers: layers,
     controls: [new ol.control.Zoom, new ol.control.ScaleLine],
     view: new ol.View({
-        center: ol.proj.transform([19.11260778620994, 52.22859848756548], 'EPSG:4326', 'EPSG:3857'),
-        zoom: 6
+        center: ol.proj.transform([19.936754056961885, 50.06194367755023], 'EPSG:4326', 'EPSG:3857'),
+        zoom: 13
     })
 });
 
@@ -101,6 +101,7 @@ function addModifyInteraction() {
         var coordWGS84 = ol.proj.transform([coordEPSG387[0], coordEPSG387[1]],"EPSG:3857", "EPSG:4326");
         var distance = 1; //TODO in future - modify
         $.ajax({url: 'getNearestRoadSegment.php?lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
+            console.log(data);
             data = JSON.parse(data);
             if(!data.error)
                 FEFunctions.initializeJsonEditor(data,'edit');

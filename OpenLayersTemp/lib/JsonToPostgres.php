@@ -284,8 +284,10 @@ class JsonToPostgres
 
         if($addPointColumn){
             //wycinanie wczesniej dodanych apostrofow z lon i lat
-            $lon = substr($lon, 1, strlen($lon)-2);
-            $lat = substr($lat, 1, strlen($lat)-2);
+            if(!is_numeric($lon))
+                $lon = substr($lon, 1, strlen($lon)-2);
+            if(!is_numeric($lat))
+                $lat = substr($lat, 1, strlen($lat)-2);
 
             array_push($colNames, '"coordinates"');
             array_push($colValues, "ST_GeomFromText('POINT($lon $lat)', $this->srid)");

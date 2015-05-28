@@ -79,8 +79,9 @@ $addBtn.click(function () {
         }).done(function (data) {
             data = JSON.parse(data);
             $btn.button('reset');
-            $addModal.modal('hide');
             FEFunctions.showAlert(data.message, data.type);
+            if(data.type != 'danger')
+                $addModal.modal('hide');
         });
     }
     else
@@ -99,8 +100,9 @@ $saveBtn.click(function () {
         }).done(function (data) {
             data = JSON.parse(data);
             $btn.button('reset');
-            $editModal.modal('hide');
             FEFunctions.showAlert(data.message, data.type);
+            if(data.type != 'danger')
+                $editModal.modal('hide');
         });
     }
     else

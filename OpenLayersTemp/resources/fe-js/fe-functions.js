@@ -41,15 +41,19 @@ var FEFunctions = {
             disable_collapse: true,
             form_name_root: "T",
             show_errors: "always",
-            schema: FEFunctions.schema
+            schema: FEFunctions.schema,
+            ajax: true
         });
-        if(jsonValues)
-            jsonEditor.setValue(jsonValues);
 
-        if(action == 'add')
-            $('#addModal').modal('show');
-        else
-            $('#editModal').modal('show');
+        jsonEditor.on('ready',function() {
+            jsonEditor.setValue(jsonValues);
+            if(action == 'add')
+                $('#addModal').modal('show');
+            else
+                $('#editModal').modal('show');
+        });
+
+
     },
     initializeJsonEditor : function(jsonValues,action) {
         if(action == 'add')
@@ -75,7 +79,7 @@ var FEFunctions = {
             if($(pointsTabs[i]).hasClass('active'))
                 index = i;
 
-        if(index != pointsTabs.length-1) {
+        if(index != pointsTabs.length-1 && pointsTabs.length) {
             $(pointsTabs[index+1])[0].click();
             $('.container-lat input').focus();
         }
@@ -89,7 +93,7 @@ var FEFunctions = {
             if ($(sectionsTabs[i]).hasClass('active'))
                 index = i;
 
-        if (index != sectionsTabs.length - 1) {
+        if (index != sectionsTabs.length - 1 && sectionsTabs.length) {
             $(sectionsTabs[index + 1])[0].click();
             $('.container-id input', $containerRoadSection).focus();
         }
