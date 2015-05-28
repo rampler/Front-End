@@ -14,8 +14,7 @@
 
     //Walidacja pól przed rozpoczęciem działań
     if ($clickedPointLat != null && $clickedPointLon != null && $searchingDistance != null && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) && preg_match('/^[0-9]+([.][0-9]+){0,1}$/', $clickedPointLat) ) {
-//        $startTime = round(microtime(true)*1000); //TODO - test time
-        $result = pg_prepare($dbconn, "roadSegmentQuery", "select * from roadsegment where id in (select roadsegmentid from roadsegmentcoordinates where (ST_DISTANCE(ST_TRANSFORM(coordinates::geometry,2163), ST_TRANSFORM(ST_GeomFromText('POINT(".$clickedPointLon." ".$clickedPointLat.")',4326),2163))) < ".$searchingDistance." order by coordinates::geometry <-> ST_GeomFromText('POINT(".$clickedPointLon." ".$clickedPointLat.")') asc limit 1)");
+        $result = pg_prepare($dbconn, "roadSegmentQuery", "select * from roadsegment where id in ( SELECT roadsegmentid  FROM roadsegmentcoordinates group by roadsegmentid having ST_Distance(ST_TRANSFORM(ST_MakeLine(coordinates::geometry),2163), ST_TRANSFORM(ST_GeomFromText('POINT(".$clickedPointLon." ".$clickedPointLat.")',4326),2163)) < ".$searchingDistance." order by ST_Distance(ST_TRANSFORM(ST_MakeLine(coordinates::geometry),2163), ST_TRANSFORM(ST_GeomFromText('POINT(".$clickedPointLon." ".$clickedPointLat.")',4326),2163)) asc limit 1)");
         $result = pg_execute($dbconn, "roadSegmentQuery", array());
 
         $roadSegment = null;
@@ -59,7 +58,6 @@
                 $coordinates['group'] = $rek['group'];
                 $coordinatesArray[] = $coordinates;
             }
-//        echo (round(microtime(true)*1000)-$startTime); //TODO - test time
 
             $roadSegment['coordinates'] = $coordinatesArray;
             echo json_encode($roadSegment);
