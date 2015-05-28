@@ -9,6 +9,8 @@ JSONEditor.defaults.languages.en = {
 };
 
 var FEFunctions = {
+    addJsonEditor: null,
+    editJsonEditor: null,
     schema : null,
     alertModalHead : '<div class="fe-alert"><div class="alert alert-dismissible fade" role="alert" style="margin:0;"> <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>',
     alertModalFooter: '</div></div>',
@@ -34,33 +36,57 @@ var FEFunctions = {
     },
     buildJsonEditor : function(jsonValues,action){
         FEFunctions.schema.title = (action == 'add') ? 'Nowy segment drogi' : 'Edytuj segment drogi';
-        jsonEditor = new JSONEditor((action == 'add') ? addForm : editForm, {
-            theme: 'bootstrap3',
-            disable_edit_json: true,
-            disable_properties: true,
-            disable_collapse: true,
-            form_name_root: "T",
-            show_errors: "always",
-            schema: FEFunctions.schema,
-            ajax: true
-        });
+        if(action == "add") {
+            if(!this.addJsonEditor) {
+                this.addJsonEditor = new JSONEditor(addForm, {
+                    theme: 'bootstrap3',
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    disable_collapse: true,
+                    form_name_root: "T",
+                    show_errors: "always",
+                    schema: FEFunctions.schema,
+                    ajax: true
+                });
 
-        jsonEditor.on('ready',function() {
-            jsonEditor.setValue(jsonValues);
-            if(action == 'add')
+                this.addJsonEditor.on('ready', function () {
+                    $('#addModal').modal('show');
+                    FEFunctions.addJsonEditor.setValue(jsonValues);
+                });
+            }
+            else {
                 $('#addModal').modal('show');
-            else
-                $('#editModal').modal('show');
-        });
+                FEFunctions.addJsonEditor.setValue(jsonValues);
+            }
+            jsonEditor = this.addJsonEditor;
+        }
+        else {
+            if(!this.editJsonEditor) {
+                this.editJsonEditor = new JSONEditor(editForm, {
+                    theme: 'bootstrap3',
+                    disable_edit_json: true,
+                    disable_properties: true,
+                    disable_collapse: true,
+                    form_name_root: "T",
+                    show_errors: "always",
+                    schema: FEFunctions.schema,
+                    ajax: true
+                });
 
+                this.editJsonEditor.on('ready', function () {
+                    $('#editModal').modal('show');
+                    FEFunctions.editJsonEditor.setValue(jsonValues);
+                });
+            }
+            else {
+                $('#editModal').modal('show');
+                FEFunctions.editJsonEditor.setValue(jsonValues);
+            }
+            jsonEditor = this.editJsonEditor;
+        }
 
     },
     initializeJsonEditor : function(jsonValues,action) {
-        if(action == 'add')
-            addForm.innerHTML = null;
-        else
-            editForm.innerHTML = null;
-
         if(!FEFunctions.schema) {
             $.ajax("resources/schema.json")
                 .done(function (data) {
