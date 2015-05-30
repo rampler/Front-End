@@ -13,7 +13,7 @@ var $editModal = $('#editModal');
 var jsonEditor;
 
 $(function () {
-    FEFunctions.changeTileMapLayers(layers[1]);
+    FEFunctions.buildLayersCheckboxes(layers[1]);;
     $("#layers").css("left", "-150px");
     $("#showHideButton").click(function () {
         if ($(this).hasClass('layersShowed')) {
@@ -28,9 +28,7 @@ $(function () {
         }
 
     });
-    $('.select-layer').change(function(){
-        FEFunctions.changeTileMapLayers(layers[1]);
-    });
+
 });
 
 FEFunctions.init();
