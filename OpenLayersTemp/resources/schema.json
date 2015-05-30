@@ -167,6 +167,7 @@
             "options": {
               "grid_columns": 6
             },
+            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
             "title": "Wysokość geograficzna"
           },
           "order": {
@@ -175,7 +176,7 @@
               "grid_columns": 3
             },
             "title": "Pozycja",
-            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "pattern": "^[0-9]*$",
             "minLength": 1
           },
           "group": {
@@ -184,7 +185,7 @@
               "grid_columns": 3
             },
             "title": "Grupa",
-            "pattern": "^[0-9]*([.][0-9]+){0,1}$",
+            "pattern": "^[0-9]*$",
             "minLength": 1
           }
         }

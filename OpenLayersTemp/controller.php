@@ -14,18 +14,28 @@ $dao = new PostgreSQLDAO();
 
 switch ($_GET['action']) {
     case "addRoadSegment":
-        if ($dao->addRoadSegment($_POST['json']))
-            echo '{"type":"success","message":"<strong>Sukces!</strong> Pomyślnie dodano segment drogi!"}';
+        $json = $_POST['json'];
+        if(!$dao->isRoadSegmentIdExist($json['id'])) {
+            if ($dao->addRoadSegment($json))
+                echo '{"type":"success","message":"<strong>Sukces!</strong> Pomyślnie dodano segment drogi!"}';
+            else
+                echo '{"type":"danger","message":"Błąd podczas dodawania drogi!"}';
+        }
         else
-            echo '{"type":"danger","message":"Błąd podczas dodawania drogi!"}';
+            echo '{"type":"danger","message":"Segment drogi o podanym id już istnieje!"}';
         break;
 
     case "saveRoadSegment":
-        //TODO check id available
-        if ($dao->saveRoadSegment($_POST['json'], $_POST['oldId']))
-            echo '{"type":"success","message":"<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!"}';
+        $json = $_POST['json'];
+        $oldId = $_POST['oldId'];
+        if($json['id'] == $oldId || !$dao->isRoadSegmentIdExist($json['id'])) {
+            if ($dao->saveRoadSegment($json, $oldId))
+                echo '{"type":"success","message":"<strong>Sukces!</strong> Pomyślnie zaktualizowano segment drogi!"}';
+            else
+                echo '{"type":"danger","message":"Błąd podczas zapisu segmentu drogi!"}';
+        }
         else
-            echo '{"type":"danger","message":"Błąd podczas zapisu segmentu drogi!"}';
+            echo '{"type":"danger","message":"Segment drogi o podanym id już istnieje!"}';
         break;
 
     case "deleteRoadSegment":

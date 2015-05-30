@@ -15,7 +15,7 @@ class PostgreSQLDAO
 
     /**
      * PostgreSQLDAO constructor.
-     * Kontruktor tworzy po³¹czenie z baz¹ danych.
+     * Kontruktor tworzy poÅ‚Ä…czenie z bazÄ… danych.
      */
     public function __construct()
     {
@@ -25,7 +25,7 @@ class PostgreSQLDAO
 
     /**
      * Metoda dodaje segment drogi zapisany w json.
-     * Zwracany jest true gdy operacja siê powiedzie lub false jak wyst¹pi b³¹d
+     * Zwracany jest true gdy operacja siÄ™ powiedzie lub false jak wystÄ…pi bÅ‚Ä…d
      * @param $json
      * @return bool
      */
@@ -44,12 +44,14 @@ class PostgreSQLDAO
         $result = pg_query($this->dbconn, "COMMIT");
         $haveErrors = ($result)?$haveErrors:true;
 
+        if($haveErrors)
+            pg_query($this->dbconn,"ROLLBACK");
         return !$haveErrors;
     }
 
     /**
      * Metoda usuwa segment drogi o podanym id.
-     * Zwracany jest true gdy operacja siê powiedzie lub false jak wyst¹pi b³¹d
+     * Zwracany jest true gdy operacja siÄ™ powiedzie lub false jak wystÄ…pi bÅ‚Ä…d
      * @param $id
      * @return bool
      */
@@ -61,20 +63,53 @@ class PostgreSQLDAO
 
     /**
      * Metoda zapisuje segment drogi zapisany w json.
-     * Zwracany jest true gdy operacja siê powiedzie lub false jak wyst¹pi b³¹d.
+     * Zwracany jest true gdy operacja siÄ™ powiedzie lub false jak wystÄ…pi bÅ‚Ä…d.
      * @param $json
      * @param $oldId
      * @return bool
      */
     public function saveRoadSegment($json, $oldId){
-        //TODO
-        $result = $this->deleteRoadSegment($oldId);
-        $result2 = $this->addRoadSegment($json);
-        return ($result && $result2);
+        if($json['id'] != $oldId) {
+            $haveErrors = false;
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"BEGIN TRANSACTION"));
+            $haveErrors = ($haveErrors || $this->deleteRoadSegment($oldId));
+            $haveErrors = ($haveErrors || $this->addRoadSegment($json));
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"COMMIT"));
+            return !$haveErrors;
+        }
+        else {
+            $haveErrors = false;
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"BEGIN TRANSACTION"));
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"update roadsegment set \"desc\" = '".$json['desc']."', mainlightingclass = '".$json['mainLightingClass']."', lamparrangement = '".$json['lampArrangement']."', street = '".$json['street']."' where id = '".$json['id']."'"));
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"delete from roadsection where roadsegmentid = '".$json['id']."'"));
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"delete from roadsegmentcoordinates where roadsegmentid = '".$json['id']."'"));
+            foreach($json['coordinates'] as $coordinates) {
+                $haveErrors = ($haveErrors || !pg_query($this->dbconn,"insert into roadsegmentcoordinates values ('".$json['id']."',ST_Point(".$coordinates['lon'].",".$coordinates['lat']."),".((is_numeric($coordinates['elev']))?$coordinates['elev']:"null").",".((is_numeric($coordinates['order']))?$coordinates['order']:"null").",".((is_numeric($coordinates['group']))?$coordinates['group']:"null").")"));
+            }
+            foreach($json['roadSection'] as $section) {
+                $haveErrors = ($haveErrors || !pg_query($this->dbconn,"insert into roadsection values ('".$section['id']."','".$json['id']."','".$section['idx']."','".$section['type']."',".((is_numeric($section['widthStart']))?$section['widthStart']:"null").",".((is_numeric($section['widthEnd']))?$section['widthEnd']:"null").",".((is_numeric($section['elevationStart']))?$section['elevationStart']:"null").",".((is_numeric($section['elevationEnd']))?$section['elevationEnd']:"null").",".((is_numeric($section['numberOfLanes']))?$section['numberOfLanes']:"null").",'".$section['roadSurfaceId']."'".",'".$section['lightingClassId']."'".")"));
+            }
+            $haveErrors = ($haveErrors || !pg_query($this->dbconn,"COMMIT"));
+
+            if($haveErrors)
+                pg_query($this->dbconn,"ROLLBACK");
+            return !$haveErrors;
+        }
     }
 
     /**
-     * Metoda zwraca listê wszystkich id powierzchni drogi w bazie
+     * Metoda sprawdza czy dany id segmentu drogi istnieje juÅ¼ w bazie
+     * @param $id
+     * @return bool
+     */
+    public function isRoadSegmentIdExist($id) {
+        $result = pg_query($this->dbconn, "select id from roadsegment where id='$id'");
+        $counter = count(pg_fetch_array($result))-1;
+        return ($counter != 0)? true : false;
+    }
+
+    /**
+     * Metoda zwraca listÄ™ wszystkich id powierzchni drogi w bazie
      * @return mixed
      */
     public function getRoadSurfaces() {
@@ -89,7 +124,7 @@ class PostgreSQLDAO
     }
 
     /**
-     * Metoda zwraca listê wszystkich id klas oœwietleniowych w bazie
+     * Metoda zwraca listÄ™ wszystkich id klas oÅ›wietleniowych w bazie
      * @return mixed
      */
     public function getLightningClasses() {
@@ -104,12 +139,12 @@ class PostgreSQLDAO
     }
 
     /**
-     * Funkcja wyszukuje najbli¿szy segment drogi
+     * Funkcja wyszukuje najbliÅ¼szy segment drogi
      *
-     * @param $lat - szerokoœæ geograficzna
-     * @param $lon  - d³ugoœæ geograficzna
-     * @param $distance - maksymalny dystans poszukiwañ
-     * @return null - je¿eli nie znajdzie segmentu, json - je¿eli znajdzie
+     * @param $lat - szerokoÅ›Ä‡ geograficzna
+     * @param $lon  - dÅ‚ugoÅ›Ä‡ geograficzna
+     * @param $distance - maksymalny dystans poszukiwaÅ„
+     * @return null - jeÅ¼eli nie znajdzie segmentu, json - jeÅ¼eli znajdzie
      */
     public function getNearestRoadSegment($lat, $lon, $distance)
     {
@@ -138,7 +173,7 @@ class PostgreSQLDAO
                 $section['elevationEnd'] = $rek['elevationend'];
                 $section['roadSurfaceId'] = $rek['roadsurfaceid'];
                 $section['lightingClassId'] = $rek['lightingclassid'];
-                $section['numberOfLanes'] = 0; //TODO - kolejny request
+                $section['numberOfLanes'] =  $rek['numberoflanes'];
                 $sectionsArray[] = $section;
             }
             $roadSegment['roadSection'] = $sectionsArray;
