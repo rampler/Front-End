@@ -100,10 +100,12 @@ function addModifyInteraction() {
         var coordEPSG387 = getJSONcoordinates(editingLayer);
         var coordWGS84 = ol.proj.transform([coordEPSG387[0], coordEPSG387[1]],"EPSG:3857", "EPSG:4326");
         var distance = 100;
-        $.ajax({url: 'getNearestRoadSegment.php?lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
+        $.ajax({url: 'controller.php?action=getNearestRoadSegment&lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
             data = JSON.parse(data);
-            if(!data.error)
-                FEFunctions.buildJsonEditor(data,'edit');
+            if(!data.error) {
+                FEFunctions.buildJsonEditor(data, 'edit');
+                $('[name=oldId]').val(data.id);
+            }
             else {
                 FEFunctions.showAlert(data.error, 'danger');
                 clearDrawings();

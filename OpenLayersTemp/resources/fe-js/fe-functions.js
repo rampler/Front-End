@@ -65,11 +65,19 @@ var FEFunctions = {
     buildJsonEditor : function(jsonValues,action){
         FEFunctions.schema.title = (action == 'add') ? 'Nowy segment drogi' : 'Edytuj segment drogi';
         if(action == "add") {
+            $('#addForm [data-schemaid=root]').html('');
+            FEFunctions.addJsonEditor.root.preBuild();
+            FEFunctions.addJsonEditor.root.build();
+            FEFunctions.addJsonEditor.root.postBuild();
             $('#addModal').modal('show');
             FEFunctions.addJsonEditor.setValue(jsonValues);
             jsonEditor = this.addJsonEditor;
         }
         else {
+            $('#editForm [data-schemaid=root]').html('');
+            FEFunctions.editJsonEditor.root.preBuild();
+            FEFunctions.editJsonEditor.root.build();
+            FEFunctions.editJsonEditor.root.postBuild();
             $('#editModal').modal('show');
             FEFunctions.editJsonEditor.setValue(jsonValues);
             jsonEditor = this.editJsonEditor;

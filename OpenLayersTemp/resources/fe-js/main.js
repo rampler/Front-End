@@ -54,10 +54,10 @@ $('#deleteBtn').click(function () {
 $('#deleteConfirmedBtn').click(function () {
     var $btn = $(this).button('loading');
     $.ajax({
-        url: 'deleteRoadSegment.php',
+        url: 'controller.php?action=deleteRoadSegment',
         type: 'POST',
         data: {
-            roadSegmentId: jsonEditor.getValue().id
+            roadSegmentId: $('[name=oldId]').val()
         }
     }).done(function (data) {
         data = JSON.parse(data);
@@ -72,7 +72,7 @@ $addBtn.click(function () {
     if (!(jsonEditor.validate().length)) {
         var $btn = $(this).button('loading');
         $.ajax({
-            url: 'addRoadSegment.php',
+            url: 'controller.php?action=addRoadSegment',
             type: 'POST',
             data: {
                 json: jsonEditor.getValue()
@@ -93,10 +93,11 @@ $saveBtn.click(function () {
     if (!(jsonEditor.validate().length)) {
         var $btn = $(this).button('loading');
         $.ajax({
-            url: 'saveRoadSegment.php',
+            url: 'controller.php?action=saveRoadSegment',
             type: 'POST',
             data: {
-                json: jsonEditor.getValue()
+                json: jsonEditor.getValue(),
+                oldId: $('[name=oldId]').val()
             }
         }).done(function (data) {
             data = JSON.parse(data);
