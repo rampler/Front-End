@@ -9,6 +9,8 @@ JSONEditor.defaults.languages.en = {
 };
 
 var FEFunctions = {
+    tileServerAddress: "http://otile1.mqcdn.com/tiles/1.0.0/",
+    tileServerImageFormat: "png",
     addJsonEditor: null,
     editJsonEditor: null,
     schema : null,
@@ -41,6 +43,17 @@ var FEFunctions = {
                     ajax: true
                 });
             });
+    },
+    changeTileMapLayers: function(layer){
+        var checkedLayers = [];
+        $('.select-layer').each(function(){
+            if(this.checked)
+                checkedLayers.push(this.value);
+        });
+        var newSource = new ol.source.XYZ({
+            url: this.tileServerAddress+checkedLayers.join(',')+"/{z}/{x}/{y}."+this.tileServerImageFormat
+        });
+        layer.setSource(newSource);
     },
     showAlert : function(alertMessage, alertType) {
         if(!alertType)

@@ -125,3 +125,40 @@ h3 {
     z-index: 100000;
     padding: 0 25%;
 }
+
+a:focus {
+    outline:none;
+}
+
+#layers {
+    position:absolute;
+    bottom: 100px;
+    left: 0;
+    width: 150px;
+}
+
+#layers .panel {
+    margin: 0;
+}
+
+#layers .panel-body {
+    padding: 0 20px;
+}
+
+#showHideButton {
+    background-color: #fff;
+    display: block;
+    height: 70px;
+    width: 20px;
+    position: absolute;
+    right: -20px;
+    bottom: 0;
+    text-transform:uppercase;
+    font-size:8px;
+    line-height:8px;
+    text-align:center;
+    padding: 5px 10px 5px 5px;
+    border:1px solid #ddd;
+    border-radius:0 6px 6px 0;
+    word-wrap:break-word;
+}

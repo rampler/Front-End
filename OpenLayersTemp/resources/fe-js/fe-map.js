@@ -2,18 +2,7 @@ var OsmMap = new ol.layer.Tile({source: new ol.source.OSM({layer: 'osm'}), visib
 
 var actualMode = 'draw';
 
-var TMSSource = new ol.source.XYZ({
-     url: "http://otile1.mqcdn.com/tiles/1.0.0/map/{z}/{x}/{y}.jpg"
-
-});
-
-//var TSMTEMPSource = new ol.source.XYZ({
-//    url: "http://tilecache.osgeo.org/wms-c/Basic.py/"
-//});
-
-var tileLayer = new ol.layer.Tile({
-    source : TMSSource
-});
+var tileLayer = new ol.layer.Tile({});
 
 var vectorLayer = new ol.layer.Vector({
     visible: false

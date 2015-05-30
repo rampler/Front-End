@@ -12,13 +12,34 @@ var $addModal = $('#addModal');
 var $editModal = $('#editModal');
 var jsonEditor;
 
+$(function () {
+    FEFunctions.changeTileMapLayers(layers[1]);
+    $("#layers").css("left", "-150px");
+    $("#showHideButton").click(function () {
+        if ($(this).hasClass('layersShowed')) {
+            $("#layers").animate({left: "-150px"}, 500);
+            $(this).removeClass("layersShowed");
+            return false;
+        }
+        else {
+            $("#layers").animate({left: "0px"}, 500);
+            $(this).addClass("layersShowed");
+            return false;
+        }
+
+    });
+    $('.select-layer').change(function(){
+        FEFunctions.changeTileMapLayers(layers[1]);
+    });
+});
+
 FEFunctions.init();
 
 /** Action on modal hiding **/
 $addModal.on('hidden.bs.modal', clearDrawings);
 $editModal.on('hidden.bs.modal', clearDrawings);
-$addModal.on('shown.bs.modal',addActionsOnModalShow);
-$editModal.on('shown.bs.modal',addActionsOnModalShow);
+$addModal.on('shown.bs.modal', addActionsOnModalShow);
+$editModal.on('shown.bs.modal', addActionsOnModalShow);
 
 /** Esc key reset drawing**/
 $(document).on('keyup', function (event) {
@@ -81,7 +102,7 @@ $addBtn.click(function () {
             data = JSON.parse(data);
             $btn.button('reset');
             FEFunctions.showAlert(data.message, data.type);
-            if(data.type != 'danger')
+            if (data.type != 'danger')
                 $addModal.modal('hide');
         });
     }
@@ -103,7 +124,7 @@ $saveBtn.click(function () {
             data = JSON.parse(data);
             $btn.button('reset');
             FEFunctions.showAlert(data.message, data.type);
-            if(data.type != 'danger')
+            if (data.type != 'danger')
                 $editModal.modal('hide');
         });
     }

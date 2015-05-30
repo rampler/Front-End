@@ -20,8 +20,10 @@
 <div class="bottom-menu" role="tabpanel">
     <div class="col-sm-4 col-md-4 col-lg-2">
         <ul class="nav nav-tabs map-nav" role="tablist">
-            <li role="presentation" class="active"><a id="tilesLayerTab" aria-controls="home" role="tab" data-toggle="tab">Kafelki</a></li>
-            <li role="presentation"><a id="vectorsLayerTab" aria-controls="home" role="tab" data-toggle="tab">Wektory</a></li>
+            <li role="presentation" class="active"><a id="tilesLayerTab" aria-controls="home" role="tab"
+                                                      data-toggle="tab">Kafelki</a></li>
+            <li role="presentation"><a id="vectorsLayerTab" aria-controls="home" role="tab"
+                                       data-toggle="tab">Wektory</a></li>
         </ul>
     </div>
 
@@ -50,14 +52,16 @@
 
 <!--Add Modal-->
 <div class="modal fade" id="addModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-        data-backdrop="false">
+     data-backdrop="false">
     <div class="modal-dialog  modal-add-dialog">
         <div class="modal-content">
             <div class="modal-body modal-add-body">
                 <div id="addForm"></div>
             </div>
             <div class="modal-footer">
-                <button id="addBtn" type="button" class="btn btn-primary" data-loading-text="Dodawanie.."><i class="glyphicon glyphicon-plus"></i> Dodaj</button>
+                <button id="addBtn" type="button" class="btn btn-primary" data-loading-text="Dodawanie.."><i
+                        class="glyphicon glyphicon-plus"></i> Dodaj
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Wróć</button>
             </div>
         </div>
@@ -73,9 +77,13 @@
                 <div id="editForm"></div>
             </div>
             <div class="modal-footer">
-                <input type="hidden" name="oldId" value="" />
-                <button id="saveBtn" type="button" class="btn btn-success" data-loading-text="Zapisywanie.."><i class="glyphicon glyphicon-floppy-disk"></i> Zapisz</button>
-                <button id="deleteBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i> Usuń</button>
+                <input type="hidden" name="oldId" value=""/>
+                <button id="saveBtn" type="button" class="btn btn-success" data-loading-text="Zapisywanie.."><i
+                        class="glyphicon glyphicon-floppy-disk"></i> Zapisz
+                </button>
+                <button id="deleteBtn" type="button" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>
+                    Usuń
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Wróć</button>
             </div>
         </div>
@@ -92,11 +100,33 @@
                 Czy jesteś pewien, że chcesz usunąć ten segment drogi?
             </div>
             <div class="modal-footer">
-                <button id="deleteConfirmedBtn" type="button" class="btn btn-danger" data-loading-text="Usuwanie.."><i class="glyphicon glyphicon-trash"></i> Usuń</button>
+                <button id="deleteConfirmedBtn" type="button" class="btn btn-danger" data-loading-text="Usuwanie.."><i
+                        class="glyphicon glyphicon-trash"></i> Usuń
+                </button>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Wróć</button>
             </div>
         </div>
     </div>
+</div>
+
+<!--Menu warstw wysuwane-->
+<div id="layers">
+    <div class="panel panel-default">
+        <div class="panel-heading">Widoczne warstwy</div>
+        <div class="panel-body">
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="select-layer" name="layer-map" value="map" checked="checked"> map
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" class="select-layer" name="layer-map" value="test"> test
+                </label>
+            </div>
+        </div>
+    </div>
+    <a href="#" id="showHideButton">Warstwy</a>
 </div>
 
 <script src="resources/fe-js/fe-functions.js" type="text/javascript"></script>
