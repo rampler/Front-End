@@ -1,0 +1,27 @@
+{
+    "type": "object",
+    "properties": {
+        "projVerVectorInput": {
+            "type": "array",
+            "items": {
+                "type": "object",
+                "properties": {
+                    "roadSegmentId": {
+                        "type": "string"
+                    },
+                    "projectVeryficationVectorId": {
+                        "type": "string"
+                    }
+                },
+                "required": [
+                    "roadSegmentId",
+                    "projectVeryficationVectorId"
+                ],
+                "additionalProperties": false
+            }
+        }
+    },
+    "required": [
+        "projVerVectorInput"
+    ]
+}

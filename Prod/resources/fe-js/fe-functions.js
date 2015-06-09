@@ -9,7 +9,7 @@ JSONEditor.defaults.languages.en = {
 };
 
 var FEFunctions = {
-    tileServerAddress: "http://127.0.0.1:7890/",
+    tileServerAddress: "http://otile1.mqcdn.com/tiles/1.0.0/",
     tileServerImageFormat: "png",
     addJsonEditor: null,
     editJsonEditor: null,

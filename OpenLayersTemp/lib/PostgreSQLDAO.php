@@ -19,7 +19,7 @@ class PostgreSQLDAO
      */
     public function __construct()
     {
-        $this->dbconn = pg_connect("host=localhost dbname=frontend2 user=frontend password=frontend")
+        $this->dbconn = pg_connect("host=localhost dbname=frontend3 user=frontend password=frontend")
         or die("Can't connect to database" . pg_last_error());
     }
 

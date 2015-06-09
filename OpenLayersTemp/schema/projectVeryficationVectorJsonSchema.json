@@ -1,0 +1,43 @@
+{
+    "type": "object",
+    "properties": {
+        "projectVeryficationVector": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string"
+                },
+                "mainLightingClass": {
+                    "type": "string"
+                },
+                "projectVeryfication": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "lightingProfileId": {
+                                "type": "string"
+                            },
+                            "weight": {
+                                "type": "integer"
+                            }
+                        },
+                        "required": [
+                            "lightingProfileId",
+                            "weight"
+                        ]
+                    }
+                }
+            },
+            "required": [
+                "id",
+                "mainLightingClass",
+                "projectVeryfication"
+            ],
+            "additionalProperties": false
+        }
+    },
+    "required": [
+        "projectVeryficationVector"
+    ]
+}

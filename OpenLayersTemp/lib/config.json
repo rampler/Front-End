@@ -1,8 +1,6 @@
 {
   "names":{
-    "roadSegment":{
-      "coordinates": "roadSegment_roadSegmentCoordinates"
-    }
+    "roadSegment_coordinates": "roadSegment_roadSegmentCoordinates"
   },
 
   "parents":{

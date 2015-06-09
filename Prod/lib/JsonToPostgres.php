@@ -11,7 +11,7 @@ class JsonToPostgres
     private $delimiter;
     private $configParents;
     private $configNames;
-    private $srid=4326;
+    private $srid = 4326;
 
     function __construct($configPath = null, $delimiter = '_')
     {
@@ -46,13 +46,15 @@ class JsonToPostgres
     {
         $decoded = json_decode($jsonString, true);
         $flat = $this->flattenArray($decoded);
-        if($this->configNames!=null){
+        if ($this->configNames != null) {
             $replaced = $this->replaceNames($flat);
-            $prepared = $this->prepareArray($replaced);
+            $prepared = $this->prepare($replaced);
         } else {
-            $prepared = $this->prepareArray($flat);
+            $prepared = $this->prepare($flat);
         }
+
         $stmts = $this->makeSQLStatements($prepared);
+
         return $stmts;
     }
 
@@ -84,15 +86,15 @@ class JsonToPostgres
      */
     private function replaceNames($notNestedArray)
     {
-        $regex = '/[_][0-9]+/';
+        $regex = "/[$this->delimiter][0-9]+/";
         foreach ($notNestedArray as $k => $v) {
             $noDigitsKey = preg_replace($regex, '', $k);
             foreach ($this->configNames as $p => $o) {
                 $pos = strripos($noDigitsKey, $p);
                 if ($pos !== false) {
                     //klucz z config=>names zawiera sie w kluczu bez numerow - zamieniamy klucze
-                    $dividedOldKey = preg_split("/[_]/", $k);
-                    $dividedNewKey = preg_split("/[_]/", $o);
+                    $dividedOldKey = preg_split("/[$this->delimiter]/", $k);
+                    $dividedNewKey = preg_split("/[$this->delimiter]/", $o);
 
                     $newKey = '';
                     for ($i = 0; $i < count($dividedOldKey); $i++) {
@@ -111,17 +113,13 @@ class JsonToPostgres
         return $notNestedArray;
     }
 
-    function prepareArray($array)
+    function prepare($array)
     {
         $prepared = array();
-        $i = -1;
-        $currTable = '';
-        $currNumber = '';
-        $numeric = false;
-        $addParentId = false;
+        $arranged = array();
 
-        //dla kazdego klucza szukamy nazwy tabeli i kolumny tak aby mozliwe bylo pozniejsze sforumolowanie zapytania sql
         foreach ($array as $k => $v) {
+            $hasTableIndex = false;
             $colNameIndex = strripos($k, $this->delimiter);
             $colName = substr($k, $colNameIndex + 1); //nazwa kolumny
             $rest = substr($k, 0, $colNameIndex); //reszta z nazwy klucza
@@ -135,11 +133,7 @@ class JsonToPostgres
             } else {
                 $checkMe = substr($rest, $index + 1); //sprawdzamy czy wycinek klucza jest numerem jesli tak to jest to zagniezdzona tabela
                 if (is_numeric($checkMe)) {
-                    if ($currNumber != $checkMe) {
-                        $numeric = true;
-                        $currNumber = $checkMe;
-                    }
-
+                    $hasTableIndex = true;
                     $rest = substr($rest, 0, $index);
                     $index = strripos($rest, $this->delimiter);
                     if ($index === false) {
@@ -152,35 +146,59 @@ class JsonToPostgres
                 }
             }
 
-            if ($currTable != $tableName || $numeric) {
-                $currTable = $tableName;
-                $i++;
-            } else {
-                //ciagle dodajemy dane do tej samej tabeli
-            }
-
-            //dodanie cudzyslowow do nazw kolumn
+            //dodanie cudzyslowow do nazw kolumn i lower case
             $colName = "\"" . strtolower($colName) . "\"";
 
-            //dodanie apostrofow do wartosci je¿eli nie s¹ liczb¹ lub null jezeli nie podano wartoœci
-            if(!$v)
-                $v = "null";
-            else if(!is_numeric($v))
-                $v="'" . $v . "'";
+            //dodanie apostrofow do wartosci jezeli nie sa liczba lub null jezeli nie podano wartoÅ“ci
+            $v = $this->addApostrophes($v);
 
-            $prepared[$i][$tableName][$colName] = $v;
-
-            if ($addParentId != false) {
-                $addParentId[0] = "\"" . strtolower($addParentId[0]) . "\"";
-                $prepared[$i][$tableName][$addParentId[0]] = "'".$array[$addParentId[1]]."'";
+            if ($hasTableIndex) {
+                $arranged[$tableName][$checkMe][$colName] = $v;
+            } else {
+                $arranged[$tableName][0][$colName] = $v;
             }
 
-            $numeric = false;
+            if ($addParentId != false) {
+                $childKey = "\"" . strtolower($addParentId[0]) . "\""; //cudzyslowy i lowercase
+                $parentValue = $array[$addParentId[1]];
+                $parentValue = $this->addApostrophes($parentValue);
+                if ($hasTableIndex) {
+                    $arranged[$tableName][$checkMe][$childKey] = $parentValue;
+                } else {
+                    $arranged[$tableName][0][$childKey] = $parentValue;
+                }
+            }
+        }
+
+        //po powyzszych operacjach tabela arrange sklada sie z takich elementow [nazwa_tabeli][indeks][nazwa_kolumny] = wartosc
+        //zamieniamy powyzsze elementy tak zeby wygladaly w ten sposob [indeks][nazwa_tabeli][nazwa_koluny] = wartosc
+
+        $i = 0;
+        foreach ($arranged as $k => $v) {
+            foreach ($v as $p => $o) {
+                $prepared[$i] = array($k => $o);
+                $i++;
+            }
         }
         return $prepared;
     }
 
     /**
+     * Pomocnicza funkcja dodajaca apostrofy do wartosci zmiennej jezeli nie jest ona numerem, jezeli zmienna nie jest zainicjalizowana zwraca "null"
+     * @param $value
+     * @return string
+     */
+    private function addApostrophes($value)
+    {
+        if (!$value)
+            return "null";
+        else if (!is_numeric($value))
+            return "'" . $value . "'";
+        else
+            return $value;
+    }
+
+      /**
      * Funnkcja ktora na podstawie pliku konfiguracyjnego json dodaje kolumny z wartoscia kolumny rodzica dla aktualnie sprawdzanej tabeli.
      * Zwraca false jesi nie jest konieczne dodanie nowej kolumny lub tablice zawieracja nazwe nowej kolumny i jej wartosc
      * @param $currentKey
@@ -189,17 +207,17 @@ class JsonToPostgres
     function addParentId($currentKey)
     {
         //sprawdzamy czy jest zdefiniowany plik konfiguracyjny
-        if($this->configNames==null) return false;
+        if ($this->configNames == null) return false;
 
-        $regex = '/[_][0-9]+/';
+        $regex = "/[$this->delimiter][0-9]+/";
         $noDigitsKey = preg_replace($regex, '', $currentKey); //usuwamy numery
 
         foreach ($this->configParents as $k => $v) {
             $index = strripos($k, '_'); //usuwamy ostatnia czesc klucza z pliku konfiguracyjnego, nie bedziemy jej porownywac
             $parentKey = substr($k, 0, $index);
             if ($noDigitsKey == $parentKey) {
-                $dividedPathToParentId = preg_split("/[_]/", $this->configParents[$parentKey . '_' . 'parentId']);
-                $dividedKey = preg_split("/[_]/", $currentKey);
+                $dividedPathToParentId = preg_split("/[$this->delimiter]/", $this->configParents[$parentKey . $this->delimiter . 'parentId']);
+                $dividedKey = preg_split("/[$this->delimiter]/", $currentKey);
 
                 $newPathToParentId = '';
                 for ($i = 0; $i < count($dividedPathToParentId); $i++) {
@@ -215,7 +233,7 @@ class JsonToPostgres
                 }
                 $newPathToParentId = substr($newPathToParentId, 1);
 
-                $pathToChildKey = $this->configParents[$parentKey . '_childId'];
+                $pathToChildKey = $this->configParents[$parentKey . $this->delimiter . 'childId'];
                 return array($pathToChildKey, $newPathToParentId);
             }
         }
@@ -228,23 +246,24 @@ class JsonToPostgres
      * @param $preparedArray
      * @return array
      */
-    function makeSQLStatements($preparedArray){
+    function makeSQLStatements($preparedArray)
+    {
         $sqls = array();
 
-        foreach($preparedArray as $p){
-            foreach($p as $k => $v){
+        foreach ($preparedArray as $p) {
+            foreach ($p as $k => $v) {
                 //$k to nasz klucz - nazwa tabeli
                 $colNames = '';
                 $colValues = '';
 
-                foreach($v as $a => $b){
+                foreach ($v as $a => $b) {
                     $colNames = $colNames . $a . ',';
                     $colValues = $colValues . $b . ',';
                 }
 
                 //usuwamy ostatni przecinek
-                $colNames = substr($colNames, 0, strlen($colNames)-1);
-                $colValues = substr($colValues, 0, strlen($colValues)-1);
+                $colNames = substr($colNames, 0, strlen($colNames) - 1);
+                $colValues = substr($colValues, 0, strlen($colValues) - 1);
 
                 $statement = $this->makeSQLStatement($colNames, $colValues, $k);
                 array_push($sqls, $statement);
@@ -261,20 +280,21 @@ class JsonToPostgres
      * @param $tableName
      * @return string
      */
-    private function makeSQLStatement($colNames, $colValues, $tableName){
+    private function makeSQLStatement($colNames, $colValues, $tableName)
+    {
         $colNames = explode(',', $colNames);
         $colValues = explode(',', $colValues);
         $addPointColumn = false;
         $length = count($colNames);
-        for($i=0; $i<$length; $i++){
-            if($colNames[$i] == '"lon"'){
+        for ($i = 0; $i < $length; $i++) {
+            if ($colNames[$i] == '"lon"') {
                 $lon = $colValues[$i];
                 unset($colNames[$i]);
                 unset($colValues[$i]);
                 $addPointColumn = true;
                 continue;
             }
-            if($colNames[$i] == '"lat"'){
+            if ($colNames[$i] == '"lat"') {
                 $lat = $colValues[$i];
                 unset($colNames[$i]);
                 unset($colValues[$i]);
@@ -282,7 +302,7 @@ class JsonToPostgres
             }
         }
 
-        if($addPointColumn){
+        if ($addPointColumn) {
             //wycinanie wczesniej dodanych apostrofow z lon i lat
             if(!is_numeric($lon))
                 $lon = substr($lon, 1, strlen($lon)-2);
