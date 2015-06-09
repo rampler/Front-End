@@ -101,7 +101,7 @@ var FEFunctions = {
         $.ajax("resources/layers.json")
             .done(function (data) {
                 $(data).each(function(){
-                    var checkboxHtml = '<div class="checkbox"><label><input type="checkbox" class="select-layer" name="layer-'+this+'" value="'+this+'" checked="checked"> '+this+'</label></div>';
+                    var checkboxHtml = '<div class="checkbox"><label><input type="checkbox" class="select-layer" name="layer-'+this.id+'" value="'+this.id+'" checked="checked"> '+this.name+'</label></div>';
                     $('#layers .panel-body').append(checkboxHtml);
                     $('.select-layer').change(function(){
                         FEFunctions.changeTileMapLayers(layer);

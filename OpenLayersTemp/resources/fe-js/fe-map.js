@@ -88,7 +88,7 @@ function addModifyInteraction() {
     select_interaction.on('drawend', function(event) {
         var coordEPSG387 = getJSONcoordinates(editingLayer);
         var coordWGS84 = ol.proj.transform([coordEPSG387[0], coordEPSG387[1]],"EPSG:3857", "EPSG:4326");
-        var distance = 100;
+        var distance = 10;
         $.ajax({url: 'controller.php?action=getNearestRoadSegment&lat='+coordWGS84[1]+'&lon='+coordWGS84[0]+'&dist='+distance}).done(function(data){
             data = JSON.parse(data);
             if(!data.error) {

@@ -66,6 +66,21 @@ $('#vectorsLayerTab').click(function () {
     layers[2].setVisible(true);
 });
 
+$('#check-all-btn').click(function(){
+    var $layers = $($('.select-layer'));
+    for(var i=0; i<$layers.length; i++)
+        $($layers[i]).prop('checked', true);
+    FEFunctions.changeTileMapLayers(tileLayer);
+});
+
+$('#uncheck-all-btn').click(function(){
+    var $layers = $($('.select-layer'));
+    for(var i=0; i<$layers.length; i++)
+        $($layers[i]).prop('checked', false);
+    FEFunctions.changeTileMapLayers(tileLayer);
+});
+
+
 $('#deleteBtn').click(function () {
     $('#deleteModal').modal('show');
 });
