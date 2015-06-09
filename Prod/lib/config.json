@@ -1,0 +1,20 @@
+{
+  "names":{
+    "roadSegment":{
+      "coordinates": "roadSegment_roadSegmentCoordinates"
+    }
+  },
+
+  "parents":{
+    "roadSegment":{
+      "roadSegmentCoordinates":{
+        "childId": "roadSegmentId",
+        "parentId": "roadSegment_id"
+      },
+      "roadSection":{
+        "childId": "roadSegmentId",
+        "parentId": "roadSegment_id"
+      }
+    }
+  }
+}
